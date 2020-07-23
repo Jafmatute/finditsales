@@ -2,7 +2,7 @@ import React from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 
 const Icon = (props) => {
-  const {icons, securePassword} = props;
+  const {icons, securePassword, check} = props;
   switch (icons) {
     case 'password':
       if (securePassword) {
@@ -11,7 +11,9 @@ const Icon = (props) => {
         return <Feather name="eye" color="grey" size={20} />;
       }
     case 'check':
-      return <Feather name="check-circle" color="green" size={20} />;
+      return check ? (
+        <Feather name="check-circle" color="green" size={20} />
+      ) : null;
     default:
       return null;
   }

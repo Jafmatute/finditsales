@@ -1,9 +1,9 @@
 import React from 'react';
 import color from 'color';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-import {useTheme, Portal, FAB} from 'react-native-paper';
+import {useTheme} from 'react-native-paper';
 import {useSafeArea} from 'react-native-safe-area-context';
-import {useIsFocused, RouteProp} from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 
 //animaciones
 import overlay from '../context/overlay';

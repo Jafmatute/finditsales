@@ -12,12 +12,42 @@ import Icon from './Icon';
 export const InputText = ({
   placeholder,
   secureTextEntry,
-  onChangeText,
   title,
   icon,
-  onPress,
+  text,
+  onChange,
+  //check,
+  //onChangeText,
 }) => {
-  const [securePassword, setSecurePassword] = useState(true);
+  const [securePassword, setSecurePassword] = useState(secureTextEntry);
+  const [check, setCheck] = useState(false);
+  const [isvalid, setIsValid] = useState(true);
+  const onChange_check = (e) => {
+    if (e.trim().length >= 6) {
+      setCheck(true);
+      setIsValid(true);
+    } else {
+      setCheck(false);
+      setIsValid(false);
+    }
+  };
+
+  //retornar nombres
+  const Name = (nameIs) => {
+    let name;
+    switch (nameIs) {
+      case 'email':
+        return (name = 'Correo');
+        break;
+      case 'password':
+        return (name = 'Contraseña');
+        break;
+
+      default:
+        return (name = '');
+        break;
+    }
+  };
 
   return (
     <>
@@ -29,15 +59,23 @@ export const InputText = ({
           secureTextEntry={securePassword}
           style={styles.textInput}
           autoCapitalize="none"
-          onChangeText={onChangeText}
+          onChange={(e) => onChange(e, text)}
+          onChangeText={(e) => onChange_check(e)}
         />
 
         {icon && (
           <TouchableOpacity onPress={() => setSecurePassword(!securePassword)}>
-            <Icon icons={icon} securePassword={securePassword} />
+            <Icon icons={icon} check={check} securePassword={securePassword} />
           </TouchableOpacity>
         )}
       </View>
+      {isvalid ? null : (
+        <View>
+          <Text style={styles.errorMsg}>{`${Name(
+            text,
+          )} debe tener 6 caracteres de longitud.`}</Text>
+        </View>
+      )}
     </>
   );
 };
@@ -68,5 +106,9 @@ const styles = StyleSheet.create({
     marginTop: Platform.OS === 'ios' ? 0 : -12,
     paddingLeft: 10,
     color: '#05375a',
+  },
+  errorMsg: {
+    color: '#FF0000',
+    fontSize: 14,
   },
 });

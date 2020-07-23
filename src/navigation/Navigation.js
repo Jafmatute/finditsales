@@ -1,6 +1,6 @@
 import React from 'react';
+
 import {createStackNavigator} from '@react-navigation/stack';
-import {useNavigation} from '@react-navigation/native';
 import {useTheme} from 'react-native-paper';
 
 const Stack = createStackNavigator();

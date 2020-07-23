@@ -1,41 +1,26 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  TouchableOpacity,
-} from 'react-native';
+import React, {useRef} from 'react';
+import {StyleSheet, SafeAreaView} from 'react-native';
+import Toast from 'react-native-easy-toast';
 
 //componentes
-import {InputText} from '../../components/auth/Input';
+import RegisterForm from '../../components/auth/RegisterForm';
+import {Logo} from '../../components/Logo';
 
 export default function SignUp({navigation}) {
+  const toasRef = useRef();
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.wrapper}>
-        <Text style={styles.header}>Registrarse</Text>
-        <View>
-          <InputText placeholder={'Correo Electronico'} icon={'check'} />
-          <InputText
-            secureTextEntry
-            icon={'password'}
-            placeholder={'Contraseña'}
-          />
-          <InputText
-            secureTextEntry
-            icon={'password'}
-            placeholder={'Repetir Contraseña'}
-          />
-        </View>
-        <View style={styles.forgotContainer}></View>
-
-        <TouchableOpacity style={styles.btnRegister}>
-          <Text style={[styles.btnTextForgot, {color: 'white'}]}>
-            Regístrarme
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <Logo />
+      <RegisterForm toasRef={toasRef} />
+      <Toast
+        ref={toasRef}
+        style={{backgroundColor: 'red'}}
+        position="top"
+        positionValue={300}
+        fadeInDuration={500}
+        fadeOutDuration={700}
+        opacity={0.8}
+      />
     </SafeAreaView>
   );
 }
@@ -46,36 +31,6 @@ const styles = StyleSheet.create({
     padding: 10,
     justifyContent: 'center',
     backgroundColor: '#fff',
-  },
-  wrapper: {
-    padding: 14,
-    justifyContent: 'center',
-    backgroundColor: '#fff',
-  },
-  header: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 40,
-    color: '#007dd7',
-  },
-  btnTextForgot: {
-    fontWeight: 'bold',
-  },
-  forgotContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    paddingVertical: 20,
-  },
-  btnRegister: {
-    paddingTop: 20,
-    backgroundColor: '#007dd7',
-    padding: 10,
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  ggBtn: {
-    flexDirection: 'row',
+    marginVertical: 190,
   },
 });
