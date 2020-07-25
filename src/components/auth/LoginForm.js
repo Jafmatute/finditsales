@@ -1,11 +1,16 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 
+//import firebase
+import firebase from '../../utils/firebase';
+import 'firebase/auth';
 //components
 import {InputText} from './Input';
-
 //function validation
 import {validateEmail} from '../../utils/Validation';
+
+//context
+import {AuthContext} from '../../context/authContext';
 
 export default function LoginForm(props) {
   const {navigation, toasRef} = props;
@@ -13,6 +18,8 @@ export default function LoginForm(props) {
     email: '',
     password: '',
   });
+
+  const {signIn} = useContext(AuthContext);
 
   const onChange_text = (e, type) => {
     setFormLogin({...formLogin, [type]: e.nativeEvent.text});
@@ -30,6 +37,19 @@ export default function LoginForm(props) {
     } else if (!validateEmail(email)) {
       toasRef.current.show('Por favor, ingrese un correo válido', 3000);
     } else {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .then((response) => {
+          //console.log('RESPUEST', response);
+          signIn(response);
+        })
+        .catch((error) => {
+          if (error) {
+            toasRef.current.show('Contraseña ó correo incorrecto.', 3000);
+          }
+          console.log('RESPUEST', error);
+        });
     }
   };
   return (
@@ -104,7 +124,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   btnLogin: {
-    backgroundColor: '#007dd7',
+    backgroundColor: '#8e459e',
     padding: 10,
     borderRadius: 8,
     justifyContent: 'center',

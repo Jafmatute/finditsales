@@ -1,12 +1,10 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {DrawerItem, DrawerContentScrollView} from '@react-navigation/drawer';
 import {
-  useTheme,
   Avatar,
   Title,
   Caption,
-  Paragraph,
   Drawer,
   Text,
   TouchableRipple,
@@ -14,8 +12,12 @@ import {
 } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+//context
+import {AuthContext} from '../context/authContext';
+
 export default function DrawerContent(props) {
   const {navigation} = props;
+  const {signOut} = useContext(AuthContext);
 
   const onchangeScreen = (screen) => {
     navigation.navigate(screen);
@@ -97,7 +99,7 @@ export default function DrawerContent(props) {
       <Drawer.Section style={styles.bottomDrawerSection}>
         <DrawerItem
           label="Sing Up"
-          onPress={() => {}}
+          onPress={() => signOut()}
           icon={({color, size}) => (
             <Icon name="sign-in" color={color} size={size} />
           )}

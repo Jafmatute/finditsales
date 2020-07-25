@@ -17,7 +17,7 @@ function StackNavigation() {
   const theme = useTheme();
   return (
     <Stack.Navigator
-      initialRouteName="FeedList"
+      initialRouteName="home"
       headerMode="screen"
       screenOptions={{
         header: ({scene, previous, navigation}) => {
