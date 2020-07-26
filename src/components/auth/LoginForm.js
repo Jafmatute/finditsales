@@ -5,7 +5,7 @@ import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import firebase from '../../utils/firebase';
 import 'firebase/auth';
 //components
-import {InputText} from './Input';
+import {InputText} from '../Input';
 //function validation
 import {validateEmail} from '../../utils/Validation';
 

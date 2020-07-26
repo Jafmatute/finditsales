@@ -3,7 +3,7 @@ import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 //import firebase
 import firebase from '../../utils/firebase';
 //Component
-import {InputText} from './Input';
+import {InputText} from '../Input';
 //función de validación
 import {validateEmail} from '../../utils/Validation';
 //context

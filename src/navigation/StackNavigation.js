@@ -1,8 +1,10 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {Appbar, Avatar, useTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 //Tabs navigators
 import BottomTab from './BottomTab';
 
@@ -10,10 +12,12 @@ import BottomTab from './BottomTab';
 import Setting from '../screens/Setting';
 import Support from '../screens/Support';
 import Profile from '../screens/account/Profile';
+import ProfileEdit from '../screens/account/ProfileEdit';
 
 const Stack = createStackNavigator();
 
-function StackNavigation() {
+function StackNavigation({navigation}) {
+  console.log('STACK NAVIGATION', navigation);
   const theme = useTheme();
   return (
     <Stack.Navigator
@@ -70,6 +74,11 @@ function StackNavigation() {
                   color: theme.colors.primary,
                 }}
               />
+              {/*<Appbar.Action
+                icon={title === 'profile' && 'account-edit'}
+                color="#8e459e"
+                onPress={() => {}}
+              />*/}
             </Appbar.Header>
           );
         },
@@ -88,6 +97,13 @@ function StackNavigation() {
       <Stack.Screen name="setting" component={Setting} />
       <Stack.Screen name="support" component={Support} />
       <Stack.Screen name="profile" component={Profile} />
+      <Stack.Screen
+        name="profileedit"
+        component={ProfileEdit}
+        options={{
+          title: '',
+        }}
+      />
     </Stack.Navigator>
   );
 }

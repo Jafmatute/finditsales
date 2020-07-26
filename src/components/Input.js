@@ -16,6 +16,7 @@ export const InputText = ({
   icon,
   text,
   onChange,
+  keyboardType,
   //check,
   //onChangeText,
 }) => {
@@ -61,6 +62,7 @@ export const InputText = ({
           autoCapitalize="none"
           onChange={(e) => onChange(e, text)}
           onChangeText={(e) => onChange_check(e)}
+          keyboardType={keyboardType}
         />
 
         {icon && (
