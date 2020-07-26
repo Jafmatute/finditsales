@@ -79,6 +79,7 @@ const RootNavigation = () => {
     signOut: async () => {
       try {
         await AsyncStorage.removeItem('userToken');
+        await AsyncStorage.removeItem('email');
       } catch (error) {
         console.log('error AsyncStorage_singOut', error);
       }

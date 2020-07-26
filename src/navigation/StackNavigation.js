@@ -14,6 +14,9 @@ import Support from '../screens/Support';
 import Profile from '../screens/account/Profile';
 import ProfileEdit from '../screens/account/ProfileEdit';
 
+//component
+import AvatarText from '../components/account/AvatarText';
+
 const Stack = createStackNavigator();
 
 function StackNavigation({navigation}) {
@@ -46,13 +49,7 @@ function StackNavigation({navigation}) {
                   onPress={() => {
                     navigation.openDrawer();
                   }}>
-                  <Avatar.Image
-                    size={40}
-                    source={{
-                      uri:
-                        'https://api.adorable.io/avatars/285/abott@adorable.png',
-                    }}
-                  />
+                  <AvatarText size={40} />
                 </TouchableOpacity>
               )}
               <Appbar.Content

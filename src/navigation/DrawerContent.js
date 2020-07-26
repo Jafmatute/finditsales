@@ -1,8 +1,8 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {DrawerItem, DrawerContentScrollView} from '@react-navigation/drawer';
+
 import {
-  Avatar,
   Title,
   Caption,
   Drawer,
@@ -14,6 +14,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 //context
 import {AuthContext} from '../context/authContext';
+//component
+import AvatarText from '../components/account/AvatarText';
 
 export default function DrawerContent(props) {
   const {navigation} = props;
@@ -29,19 +31,14 @@ export default function DrawerContent(props) {
         <View style={styles.drawerContent}>
           <View style={styles.userInfoSection}>
             <View style={{flexDirection: 'row', marginTop: 15}}>
-              <Avatar.Image
-                source={{
-                  uri: 'https://api.adorable.io/avatars/285/abott@adorable.png',
-                }}
-                size={50}
-              />
+              <AvatarText size={50} />
               <View
                 style={{
                   marginLeft: 15,
                   flexDirection: 'column',
                 }}>
                 <Title style={styles.title}>Josue A. Flores </Title>
-                <Caption style={styles.caption}>jafmatute@gmail.com</Caption>
+                <Caption style={styles.caption}>correo@gmail.com</Caption>
               </View>
             </View>
           </View>
