@@ -15,27 +15,18 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 //import firebase
 import firebase from '../../utils/firebase';
 
+import AvatarText from './AvatarText';
+
 //Logic
 export default function ProfileForm() {
   const navigation = useNavigation();
   const [user, setUser] = useState({});
-  const [email, setEmail] = useState('');
 
   useEffect(() => {
-    (async () => {
-      let mail;
-      mail = null;
-      try {
-        mail = await AsyncStorage.getItem('email');
-        setEmail(mail);
-      } catch (error) {
-        console.log('error AsyncStorage_useEffect', error);
-      }
-      firebase.auth().onAuthStateChanged((userFirebase) => {
-        setUser(userFirebase);
-      });
-    })();
-  }, []);
+    firebase.auth().onAuthStateChanged((userInfo) => {
+      setUser(userInfo);
+    });
+  });
 
   //console.log(user);
   return (
@@ -43,7 +34,7 @@ export default function ProfileForm() {
       {/*Información de inicio de sesión*/}
       <View style={[styles.userInfoSection]}>
         <View style={{flexDirection: 'row', marginTop: 15}}>
-          <Avatar.Text label={email.substr(0, 2).toUpperCase()} size={70} />
+          <AvatarText size={70} />
           <View style={{marginLeft: 20}}>
             <Title style={styles.title}>
               {user.displayName ? user.displayName : ''}
@@ -56,7 +47,7 @@ export default function ProfileForm() {
           style={styles.btnEdit}
           onPress={() =>
             navigation.navigate('profileedit', {
-              email: email,
+              email: user.email,
               userInfo: JSON.stringify(user),
             })
           }>

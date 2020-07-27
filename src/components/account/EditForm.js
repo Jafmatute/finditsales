@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, createRef} from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 
 import {useTheme, Avatar} from 'react-native-paper';
+import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -16,9 +17,10 @@ import Feather from 'react-native-vector-icons/Feather';
 
 //import component
 import {InputText} from '../Input';
+import {renderHeader, renderInner} from '../account/BottomSheet';
 
 export default function EditForm(props) {
-  const {email} = props;
+  const {email, toasRef} = props;
 
   const [image, setImage] = useState(
     'https://api.adorable.io/avatars/80/abott@adorable.png',
@@ -29,90 +31,107 @@ export default function EditForm(props) {
   };
 
   const onSubmitEditProfile = () => {
-    console.log('edit usuarios', formUserEdit);
+    const {name, city, biography} = formUserEdit;
+    if (!name || !city || !biography) {
+      toasRef.current.show('Ingrese la información de los campos', 3000);
+    } else if (name.length < 6 || city.length < 6 || biography.length < 6) {
+      toasRef.current.show('Por favor, revise la logitud de los campos', 2000);
+    } else {
+    }
   };
 
-  bs = React.createRef();
-  fall = new Animated.Value(1);
+  const bs = createRef();
+  const fall = new Animated.Value(1);
   return (
-    <View style={styles.container}>
-      <Animated.View
-        style={{
-          margin: 20,
-          opacity: Animated.add(0.1, Animated.multiply(this.fall, 1.0)),
-        }}>
-        <View style={{alignItems: 'center'}}>
-          <TouchableOpacity onPress={() => {}}>
-            <View style={styles.viewImageBackground}>
-              {email ? (
-                <>
-                  <Avatar.Text
-                    label={email.substr(0, 2).toUpperCase()}
-                    size={70}
-                    style={{
-                      height: 100,
-                      width: 100,
-                      borderRadius: 15,
+    <>
+      <BottomSheet
+        ref={bs}
+        snapPoints={[330, 0]}
+        initialSnap={1}
+        renderHeader={renderHeader}
+        renderContent={() => renderInner(bs)}
+        callbackNode={fall}
+        enabledGestureInteraction={true}
+      />
+      <View style={styles.container}>
+        <Animated.View
+          style={{
+            margin: 20,
+            opacity: Animated.add(0.2, Animated.multiply(fall, 1.0)),
+          }}>
+          <View style={{alignItems: 'center'}}>
+            <TouchableOpacity onPress={() => bs.current.snapTo(0)}>
+              <View style={styles.viewImageBackground}>
+                {email ? (
+                  <>
+                    <Avatar.Text
+                      label={email.substr(0, 2).toUpperCase()}
+                      size={70}
+                      style={{
+                        height: 100,
+                        width: 100,
+                        borderRadius: 15,
+                      }}
+                    />
+                    <View style={styles.viewIconImage}>
+                      <Icon
+                        name="camera"
+                        size={35}
+                        color="#fff"
+                        style={[styles.iconImageBackground, {marginTop: -100}]}
+                      />
+                    </View>
+                  </>
+                ) : (
+                  <ImageBackground
+                    source={{
+                      uri: image,
                     }}
-                  />
-                  <View style={styles.viewIconImage}>
-                    <Icon
-                      name="camera"
-                      size={35}
-                      color="#fff"
-                      style={[styles.iconImageBackground, {marginTop: -100}]}
-                    />
-                  </View>
-                </>
-              ) : (
-                <ImageBackground
-                  source={{
-                    uri: image,
-                  }}
-                  style={{height: 100, width: 100}}
-                  imageStyle={{borderRadius: 15}}>
-                  <View style={styles.viewIconImage}>
-                    <Icon
-                      name="camera"
-                      size={35}
-                      color="#fff"
-                      style={styles.iconImageBackground}
-                    />
-                  </View>
-                </ImageBackground>
-              )}
-            </View>
-          </TouchableOpacity>
-          <Text style={styles.userInfo}>{email}</Text>
-        </View>
+                    style={{height: 100, width: 100}}
+                    imageStyle={{borderRadius: 15}}>
+                    <View style={styles.viewIconImage}>
+                      <Icon
+                        name="camera"
+                        size={35}
+                        color="#fff"
+                        style={styles.iconImageBackground}
+                      />
+                    </View>
+                  </ImageBackground>
+                )}
+              </View>
+            </TouchableOpacity>
+            <Text style={styles.userInfo}>{email}</Text>
+          </View>
 
-        <View>
-          <InputText
-            title={'Nombre Completo'}
-            text={'name'}
-            onChange={onChange_text}
-            icon={'check'}
-          />
-          <InputText
-            title={'Ciudad'}
-            text={'city'}
-            onChange={onChange_text}
-            icon={'check'}
-          />
-          <InputText
-            title={'Biografía'}
-            text={'biography'}
-            onChange={onChange_text}
-            icon={'check'}
-          />
-        </View>
-        <TouchableOpacity
-          style={styles.commandButton}
-          onPress={onSubmitEditProfile}>
-          <Text style={styles.panelButtonTitle}>Guardar</Text>
-        </TouchableOpacity>
-      </Animated.View>
-    </View>
+          <View>
+            <InputText
+              title={'Nombre Completo'}
+              text={'name'}
+              onChange={onChange_text}
+              icon={'check'}
+            />
+            <InputText
+              title={'Ciudad'}
+              text={'city'}
+              onChange={onChange_text}
+              icon={'check'}
+            />
+            <InputText
+              title={'Biografía'}
+              text={'biography'}
+              onChange={onChange_text}
+              icon={'check'}
+            />
+          </View>
+          <TouchableOpacity
+            style={styles.commandButton}
+            onPress={onSubmitEditProfile}>
+            <Text style={styles.panelButtonTitle}>Guardar</Text>
+          </TouchableOpacity>
+        </Animated.View>
+      </View>
+    </>
   );
 }
 
@@ -145,7 +164,6 @@ const styles = StyleSheet.create({
     borderColor: '#fff',
     borderRadius: 10,
   },
-
   commandButton: {
     padding: 10,
     borderRadius: 8,
@@ -154,50 +172,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
     justifyContent: 'flex-end',
   },
-  userInfo: {marginTop: 10, fontSize: 18, fontWeight: 'bold'},
-  panel: {
-    padding: 20,
-    backgroundColor: '#FFFFFF',
-    paddingTop: 20,
+  userInfo: {
+    marginTop: 10,
+    fontSize: 18,
+    fontWeight: 'bold',
   },
-  header: {
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#333333',
-    shadowOffset: {width: -1, height: -3},
-    shadowRadius: 2,
-    shadowOpacity: 0.4,
-    // elevation: 5,
-    paddingTop: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-  panelHeader: {
-    alignItems: 'center',
-  },
-  panelHandle: {
-    width: 40,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#00000040',
-    marginBottom: 10,
-  },
-  panelTitle: {
-    fontSize: 27,
-    height: 35,
-  },
-  panelSubtitle: {
-    fontSize: 14,
-    color: 'gray',
-    height: 30,
-    marginBottom: 10,
-  },
-  panelButton: {
-    padding: 13,
-    borderRadius: 10,
-    backgroundColor: '#FF6347',
-    alignItems: 'center',
-    marginVertical: 7,
-  },
+
   panelButtonTitle: {
     fontSize: 17,
     fontWeight: 'bold',

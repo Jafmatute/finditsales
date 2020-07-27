@@ -91,6 +91,7 @@ const RootNavigation = () => {
       const email = user.email;
       try {
         await AsyncStorage.setItem('userToken', userToken);
+        await AsyncStorage.setItem('email', email);
       } catch (error) {
         console.log('error asyncStorage_signIn', error);
       }

@@ -9,6 +9,7 @@ import {
   Text,
   TouchableRipple,
   Switch,
+  Avatar,
 } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -31,7 +32,7 @@ export default function DrawerContent(props) {
         <View style={styles.drawerContent}>
           <View style={styles.userInfoSection}>
             <View style={{flexDirection: 'row', marginTop: 15}}>
-              <AvatarText size={50} />
+              {<AvatarText size={50} />}
               <View
                 style={{
                   marginLeft: 15,
