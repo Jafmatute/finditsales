@@ -13,7 +13,11 @@ export const renderHeader = () => (
   </>
 );
 
-export const renderInner = (props) => {
+export const renderInner = (
+  bs,
+  choosePhotoFromLibrery,
+  takePhotoFromCamera,
+) => {
   return (
     <>
       <View style={styles.panel}>
@@ -24,16 +28,20 @@ export const renderInner = (props) => {
         </View>
         {/**subida de fotos */}
 
-        <TouchableOpacity style={styles.panelButton} onPress={() => {}}>
+        <TouchableOpacity
+          style={styles.panelButton}
+          onPress={takePhotoFromCamera}>
           <Text style={styles.panelButtonTitle}>Tomar foto</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.panelButton} onPress={() => {}}>
+        <TouchableOpacity
+          style={styles.panelButton}
+          onPress={choosePhotoFromLibrery}>
           <Text style={styles.panelButtonTitle}>Elige de la biblioteca</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={[styles.panelButton, {backgroundColor: '#FF6347'}]}
-          onPress={() => props.current.snapTo(1)}>
+          onPress={() => bs.current.snapTo(1)}>
           <Text style={styles.panelButtonTitle}>Cancelar</Text>
         </TouchableOpacity>
       </View>
@@ -84,11 +92,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 7,
     justifyContent: 'flex-end',
-    /*padding: 13,
-    borderRadius: 10,
-    backgroundColor: '#08d4c4',
-    alignItems: 'center',
-    marginVertical: 7,*/
   },
   panelButtonTitle: {
     fontSize: 17,

@@ -6,13 +6,13 @@ import Toast from 'react-native-easy-toast';
 import EditForm from '../../components/account/EditForm';
 
 export default function ProfileEdit({navigation, route}) {
-  const {email, userInfo} = route.params;
+  const {userInfo} = route.params;
   const toasRef = useRef();
-  //console.log('MAIL', email);
+
   //console.log('USER_INFO', JSON.parse(userInfo));
   return (
     <SafeAreaView style={styles.container}>
-      <EditForm email={email} toasRef={toasRef} />
+      <EditForm toasRef={toasRef} userInfo={userInfo} />
       <Toast
         ref={toasRef}
         position="top"

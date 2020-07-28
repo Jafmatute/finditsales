@@ -14,7 +14,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 //import firebase
 import firebase from '../../utils/firebase';
-
+//component
 import AvatarText from './AvatarText';
 
 //Logic
@@ -28,7 +28,7 @@ export default function ProfileForm() {
     });
   });
 
-  //console.log(user);
+  //console.log('PROFILE FORM', user);
   return (
     <>
       {/*Información de inicio de sesión*/}
@@ -47,7 +47,6 @@ export default function ProfileForm() {
           style={styles.btnEdit}
           onPress={() =>
             navigation.navigate('profileedit', {
-              email: user.email,
               userInfo: JSON.stringify(user),
             })
           }>

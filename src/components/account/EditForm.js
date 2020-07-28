@@ -1,4 +1,4 @@
-import React, {useState, createRef} from 'react';
+import React, {useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -10,26 +10,65 @@ import {
 import {useTheme, Avatar} from 'react-native-paper';
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
+import ImagePicker from 'react-native-image-crop-picker';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Feather from 'react-native-vector-icons/Feather';
 
 //import component
 import {InputText} from '../Input';
 import {renderHeader, renderInner} from '../account/BottomSheet';
+import AvatarText from './AvatarText';
 
 export default function EditForm(props) {
-  const {email, toasRef} = props;
-
-  const [image, setImage] = useState(
-    'https://api.adorable.io/avatars/80/abott@adorable.png',
-  );
+  const {toasRef, userInfo} = props;
+  //console.log('EDIT FO5M', userInfo.email);
+  const [image, setImage] = useState('');
   const [formUserEdit, setFormUserEdit] = useState(defaultForm);
+  const [userInfo_, setUserInfo_] = useState(JSON.parse(userInfo));
+  //obtener los datos de los text
   const onChange_text = (e, type) => {
     setFormUserEdit({...formUserEdit, [type]: e.nativeEvent.text});
   };
 
+  //subida de imagenes
+  const takePhotoFromCamera = () => {
+    ImagePicker.openCamera({
+      compressImageMaxWidth: 300,
+      compressImageMaxHeight: 300,
+      cropping: true,
+      compressImageQuality: 0.7,
+    })
+      .then((img) => {
+        setImage(img.path);
+        bs.current.snapTo(1);
+      })
+      .catch((error) => {
+        if (error.message == 'User cancelled image selection') {
+          toasRef.current.show('Cancelo la acción de subir foto', 3000);
+        }
+      });
+  };
+
+  const choosePhotoFromLibrery = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 300,
+      cropping: true,
+      compressImageQuality: 0.7,
+    })
+      .then((img) => {
+        console.log('librery', img);
+        setImage(img.path);
+        bs.current.snapTo(1);
+      })
+      .catch((error) => {
+        if (error.message == 'User cancelled image selection') {
+          toasRef.current.show('Cancelo la acción de subir foto', 3000);
+        }
+      });
+  };
+
+  //enviar datos a firebase
   const onSubmitEditProfile = () => {
     const {name, city, biography} = formUserEdit;
     if (!name || !city || !biography) {
@@ -39,8 +78,7 @@ export default function EditForm(props) {
     } else {
     }
   };
-
-  const bs = createRef();
+  const bs = useRef();
   const fall = new Animated.Value(1);
   return (
     <>
@@ -49,7 +87,9 @@ export default function EditForm(props) {
         snapPoints={[330, 0]}
         initialSnap={1}
         renderHeader={renderHeader}
-        renderContent={() => renderInner(bs)}
+        renderContent={() =>
+          renderInner(bs, choosePhotoFromLibrery, takePhotoFromCamera)
+        }
         callbackNode={fall}
         enabledGestureInteraction={true}
       />
@@ -62,17 +102,10 @@ export default function EditForm(props) {
           <View style={{alignItems: 'center'}}>
             <TouchableOpacity onPress={() => bs.current.snapTo(0)}>
               <View style={styles.viewImageBackground}>
-                {email ? (
+                {!image ? (
                   <>
-                    <Avatar.Text
-                      label={email.substr(0, 2).toUpperCase()}
-                      size={70}
-                      style={{
-                        height: 100,
-                        width: 100,
-                        borderRadius: 15,
-                      }}
-                    />
+                    <AvatarText size={100} />
+
                     <View style={styles.viewIconImage}>
                       <Icon
                         name="camera"
@@ -88,7 +121,7 @@ export default function EditForm(props) {
                       uri: image,
                     }}
                     style={{height: 100, width: 100}}
-                    imageStyle={{borderRadius: 15}}>
+                    imageStyle={{borderRadius: 50}}>
                     <View style={styles.viewIconImage}>
                       <Icon
                         name="camera"
@@ -101,7 +134,7 @@ export default function EditForm(props) {
                 )}
               </View>
             </TouchableOpacity>
-            <Text style={styles.userInfo}>{email}</Text>
+            <Text style={styles.userInfo}>{userInfo_.email}</Text>
           </View>
 
           <View>
