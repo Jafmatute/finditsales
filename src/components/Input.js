@@ -65,10 +65,12 @@ export const InputText = ({
           keyboardType={keyboardType}
         />
 
-        {icon && (
+        {icon === 'password' ? (
           <TouchableOpacity onPress={() => setSecurePassword(!securePassword)}>
             <Icon icons={icon} check={check} securePassword={securePassword} />
           </TouchableOpacity>
+        ) : (
+          <Icon icons={icon} check={check} />
         )}
       </View>
       {isvalid ? null : (

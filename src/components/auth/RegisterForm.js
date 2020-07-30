@@ -6,6 +6,9 @@ import firebase from '../../utils/firebase';
 import {InputText} from '../Input';
 //función de validación
 import {validateEmail} from '../../utils/Validation';
+//custom
+import AuthStyle from '../../customs/AuthScreenStyles';
+
 //context
 import {AuthContext} from '../../context/authContext';
 
@@ -59,16 +62,14 @@ export default function RegisterForm(props) {
   };
   return (
     <>
-      <View style={styles.wrapper}>
-        <Text style={styles.header}>Crea tu Cuenta</Text>
+      <View style={[AuthStyle.wrapper]}>
+        <Text style={[AuthStyle.header]}>Crea tu Cuenta</Text>
         <View>
           <InputText
             placeholder={'Correo Electronico'}
             text={'email'}
             onChange={onChange_text}
             icon={'check'}
-            //onChangeText={onChange_check}
-            //check={check}
           />
           <InputText
             secureTextEntry
@@ -85,10 +86,10 @@ export default function RegisterForm(props) {
             onChange={onChange_text}
           />
         </View>
-        <View style={styles.forgotContainer}></View>
+        <View style={AuthStyle.forgotContainer}></View>
 
-        <TouchableOpacity style={styles.btnRegister} onPress={onSubmitRegister}>
-          <Text style={[styles.btnTextForgot, {color: 'white'}]}>
+        <TouchableOpacity style={AuthStyle.btn} onPress={onSubmitRegister}>
+          <Text style={[AuthStyle.btnTextForgot, {color: 'white'}]}>
             Regístrarme
           </Text>
         </TouchableOpacity>
@@ -103,36 +104,3 @@ function defaultForm() {
     repeatPassword: '',
   };
 }
-const styles = StyleSheet.create({
-  wrapper: {
-    padding: 14,
-    justifyContent: 'center',
-    backgroundColor: '#fff',
-  },
-  header: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 40,
-    color: '#007dd7',
-  },
-  btnTextForgot: {
-    fontWeight: 'bold',
-  },
-  forgotContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    paddingVertical: 20,
-  },
-  btnRegister: {
-    paddingTop: 20,
-    backgroundColor: '#8e459e',
-    padding: 10,
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  ggBtn: {
-    flexDirection: 'row',
-  },
-});

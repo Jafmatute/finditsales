@@ -8,6 +8,7 @@ const Stack = createStackNavigator();
 //screens
 import SignIn from '../screens/auth/SignIn';
 import SignUp from '../screens/auth/SignUp';
+import Subscription from '../screens/auth/Subscription';
 
 const Navigation = () => {
   const {colors} = useTheme();
@@ -37,6 +38,14 @@ const Navigation = () => {
           headerBackTitle: 'Atras',
         }}
         component={SignUp}
+      />
+      <Stack.Screen
+        name="subscribe"
+        component={Subscription}
+        options={{
+          title: 'Findit',
+          headerBackTitle: 'Atras',
+        }}
       />
     </Stack.Navigator>
   );

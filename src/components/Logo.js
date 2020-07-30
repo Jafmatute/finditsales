@@ -18,14 +18,14 @@ export const Logo = () => {
 };
 
 const {height} = Dimensions.get('screen');
-const height_logo = height * 0.15;
+const height_logo = height * 0.12;
 
 const styles = StyleSheet.create({
   header: {
     flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: -180,
+    marginTop: -200,
     backgroundColor: '#fff',
   },
   logo: {

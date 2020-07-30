@@ -10,10 +10,21 @@ const Icon = (props) => {
       } else {
         return <Feather name="eye" color="grey" size={20} />;
       }
+      break;
     case 'check':
       return check ? (
         <Feather name="check-circle" color="green" size={20} />
       ) : null;
+      break;
+    case 'email':
+      return <Feather name="mail" color="grey" size={20} />;
+      break;
+    case 'phone':
+      return <Feather name="phone" color="grey" size={20} />;
+      break;
+    case 'contact':
+      return <Feather name="info" color="grey" size={20} />;
+      break;
     default:
       return null;
   }

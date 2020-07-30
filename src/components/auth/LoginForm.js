@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 
 //import firebase
 import firebase from '../../utils/firebase';
@@ -8,6 +8,8 @@ import 'firebase/auth';
 import {InputText} from '../Input';
 //function validation
 import {validateEmail} from '../../utils/Validation';
+//custom
+import AuthStyle from '../../customs/AuthScreenStyles';
 
 //context
 import {AuthContext} from '../../context/authContext';
@@ -54,8 +56,8 @@ export default function LoginForm(props) {
   };
   return (
     <>
-      <View style={styles.wrapper}>
-        <Text style={styles.header}>Iniciar Sesión</Text>
+      <View style={AuthStyle.wrapper}>
+        <Text style={AuthStyle.header}>Iniciar Sesión</Text>
         <View>
           <InputText
             title={'Correo Electronico'}
@@ -71,17 +73,19 @@ export default function LoginForm(props) {
           />
         </View>
 
-        <View style={styles.forgotContainer}>
+        <View style={AuthStyle.forgotContainer}>
           <TouchableOpacity>
-            <Text style={styles.btnTextForgot}>Recuperar contraseña ?</Text>
+            <Text style={AuthStyle.btnTextForgot}>Recuperar contraseña ?</Text>
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity onPress={onSubmitLogin} style={styles.btnLogin}>
-          <Text style={[styles.btnTextForgot, {color: 'white'}]}>Entrar</Text>
+        <TouchableOpacity onPress={onSubmitLogin} style={AuthStyle.btn}>
+          <Text style={[AuthStyle.btnTextForgot, {color: 'white'}]}>
+            Entrar
+          </Text>
         </TouchableOpacity>
         <Text style={{textAlign: 'center', padding: 20}}>or</Text>
-        <View style={styles.ggBtn}></View>
+        <View style={AuthStyle.ggBtn}></View>
         <View
           style={{
             flexDirection: 'row',
@@ -91,9 +95,9 @@ export default function LoginForm(props) {
             marginTop: 20,
           }}>
           <Text>Todavía no eres miembro,</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('signup')}>
-            <Text style={[styles.btnTextForgot, {color: '#007dd7'}]}>
-              Regístrate..
+          <TouchableOpacity onPress={() => navigation.navigate('subscribe')}>
+            <Text style={[AuthStyle.btnTextForgot, {color: '#007dd7'}]}>
+              Suscribete.
             </Text>
           </TouchableOpacity>
         </View>
@@ -101,43 +105,3 @@ export default function LoginForm(props) {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  wrapper: {
-    padding: 14,
-    justifyContent: 'center',
-    backgroundColor: '#fff',
-  },
-  header: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 40,
-    color: '#007dd7',
-  },
-  btnTextForgot: {
-    fontWeight: 'bold',
-  },
-  forgotContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    paddingVertical: 20,
-  },
-  btnLogin: {
-    backgroundColor: '#8e459e',
-    padding: 10,
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  ggBtn: {
-    flexDirection: 'row',
-  },
-  action: {
-    flexDirection: 'row',
-    marginTop: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: 'black',
-    paddingBottom: 5,
-  },
-});

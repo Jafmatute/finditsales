@@ -1,15 +1,17 @@
 import React, {useRef} from 'react';
-import {StyleSheet, SafeAreaView} from 'react-native';
+import {SafeAreaView} from 'react-native';
 import Toast from 'react-native-easy-toast';
 
 //componentes
 import RegisterForm from '../../components/auth/RegisterForm';
 import {Logo} from '../../components/Logo';
+//custom
+import AuthStyle from '../../customs/AuthScreenStyles';
 
 export default function SignUp({navigation}) {
   const toasRef = useRef();
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={AuthStyle.container}>
       <Logo />
       <RegisterForm toasRef={toasRef} />
       <Toast
@@ -24,13 +26,3 @@ export default function SignUp({navigation}) {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-    justifyContent: 'center',
-    backgroundColor: '#fff',
-    marginVertical: 190,
-  },
-});
