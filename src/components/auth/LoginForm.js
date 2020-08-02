@@ -86,14 +86,7 @@ export default function LoginForm(props) {
         </TouchableOpacity>
         <Text style={{textAlign: 'center', padding: 20}}>or</Text>
         <View style={AuthStyle.ggBtn}></View>
-        <View
-          style={{
-            flexDirection: 'row',
-            padding: 10,
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: 20,
-          }}>
+        <View style={AuthStyle.footer}>
           <Text>Todavía no eres miembro,</Text>
           <TouchableOpacity onPress={() => navigation.navigate('subscribe')}>
             <Text style={[AuthStyle.btnTextForgot, {color: '#007dd7'}]}>

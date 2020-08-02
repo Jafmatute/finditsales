@@ -28,6 +28,13 @@ export default StyleSheet.create({
     justifyContent: 'flex-end',
     paddingVertical: 20,
   },
+  footer: {
+    flexDirection: 'row',
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+  },
   btn: {
     backgroundColor: '#8e459e',
     padding: 10,
