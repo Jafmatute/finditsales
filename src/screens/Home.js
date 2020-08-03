@@ -13,7 +13,7 @@ const db = firebase.firestore(firebase);
 export default function Home() {
   const [orders, setOrders] = useState([]);
   const [startOrders, setStartOrders] = useState(null);
-  const [isLoading, setIsLoading] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [totalOrders, setTotalOrders] = useState(0);
   const [uidOrders, setUidOrders] = useState([]);
   const limitOrders = 8;
@@ -43,7 +43,7 @@ export default function Home() {
   }, []);
   return (
     <SafeAreaView>
-      <ListOrders orders={orders} />
+      <ListOrders orders={orders} isLoading={isLoading} />
     </SafeAreaView>
   );
 }
