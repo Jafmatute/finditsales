@@ -13,6 +13,8 @@ import Setting from '../screens/Setting';
 import Support from '../screens/Support';
 import Profile from '../screens/account/Profile';
 import ProfileEdit from '../screens/account/ProfileEdit';
+//orders screen
+import Order from '../screens/orders/Order';
 
 //component
 import AvatarText from '../components/account/AvatarText';
@@ -99,6 +101,15 @@ function StackNavigation({navigation}) {
         component={ProfileEdit}
         options={{
           title: '',
+        }}
+      />
+      <Stack.Screen
+        name="order"
+        component={Order}
+        options={({route}) => {
+          console.log('OK_ORDER', route);
+          const title = route.params.order.item.order.descripcion;
+          return {headerTitle: title};
         }}
       />
     </Stack.Navigator>

@@ -9,19 +9,23 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Feather from 'react-native-vector-icons/Feather';
 import firebase from '../../utils/firebase';
 import 'firebase/storage';
 export default function ListOrders(props) {
   const {orders, isLoading, handleLoadMore} = props;
-  console.log('LIST_ORDERS', orders);
+  const navigation = useNavigation();
+  //console.log('LIST_ORDERS', orders);
   return (
     <View>
       {orders ? (
         <FlatList
           data={orders}
-          renderItem={(order) => <Order order={order} />}
+          renderItem={(order) => (
+            <Order order={order} navigation={navigation} />
+          )}
           keyExtractor={(item, index) => index.toString()}
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0}
@@ -38,20 +42,20 @@ export default function ListOrders(props) {
 }
 
 const Order = (props) => {
-  const {order} = props;
+  const {order, navigation} = props;
   const {descripcion, cantidad, uid, id, date} = order.item.order;
   const [imageOrders, setImageOrder] = useState(null);
   const [loadingImage, setLoadingImage] = useState(true);
-  console.log('Order_Component', order);
+  //console.log('Order_Component', order);
   useEffect(() => {
     const image = `${uid}/${id}/${id}`;
-    console.log(image);
+    //console.log(image);
     firebase
       .storage()
       .ref(`Orders/${image}.jpg`)
       .getDownloadURL()
       .then((img) => {
-        console.log(img);
+        //console.log(img);
         setImageOrder(img);
       })
       .catch((error) => {
@@ -80,53 +84,38 @@ const Order = (props) => {
   };
 
   return (
-    <TouchableOpacity onPress={() => console.log('ir a detalle')}>
-      <View style={styles.viewOrder}>
-        <View style={styles.viewOrderImg}>
-          <Image
-            style={styles.imageOrders}
-            resizeMode="cover"
-            source={{uri: imageOrders}}
-            onLoadEnd={loadingEnd}
-          />
-          <ActivityIndicator color="fff" animating={loadingImage} />
-        </View>
-        <View>
-          <Text style={styles.orderName}>{descripcion.substr(0, 35)}</Text>
-          <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-            <Text style={styles.ordercant}>{`Cantidad:${cantidad}`}</Text>
-            <Text style={[styles.ordercant, {marginLeft: 100}]}>{date}</Text>
-          </View>
-        </View>
-        <View style={styles.cardBodyBottom}>
-          <View
-            style={[
-              styles.cardGroupIcon,
-              {borderRadius: 14, backgroundColor: '#33A0FF'},
-            ]}>
-            {/*<AntDesign name="checkcircleo" size={20} />*/}
-            <Text style={[styles.cardBottomTitle]}>Detalle</Text>
-          </View>
-          <View
-            style={[
-              styles.cardGroupIcon,
-              {backgroundColor: '#8e459e', borderRadius: 14},
-            ]}>
-            {/*<AntDesign name="closecircleo" size={20} />*/}
-            <Text style={styles.cardBottomTitle}>Ofertar</Text>
-          </View>
-
-          <View
-            style={[
-              styles.cardGroupIcon,
-              {borderRadius: 14, backgroundColor: '#296C80'},
-            ]}>
-            {/* <MaterialIcons name="explore" size={20} />*/}
-            <Text style={styles.cardBottomTitle}>Ubicación</Text>
-          </View>
+    <View style={styles.viewOrder}>
+      <View style={styles.viewOrderImg}>
+        <Image
+          style={styles.imageOrders}
+          resizeMode="cover"
+          source={{uri: imageOrders}}
+          onLoadEnd={loadingEnd}
+        />
+        <ActivityIndicator color="fff" animating={loadingImage} />
+      </View>
+      <View>
+        <Text style={styles.orderName}>{descripcion.substr(0, 35)}</Text>
+        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+          <Text style={styles.ordercant}>{`Cantidad:${cantidad}`}</Text>
+          <Text style={[styles.ordercant, {marginLeft: 100}]}>{date}</Text>
         </View>
       </View>
-    </TouchableOpacity>
+      <View style={styles.cardBodyBottom}>
+        <TouchableOpacity onPress={() => navigation.navigate('order', {order})}>
+          <View style={[styles.cardGroupIcon]}>
+            <AntDesign name="checkcircleo" size={20} />
+            <Text style={[styles.cardBottomTitle]}>Detalle</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => {}}>
+          <View style={[styles.cardGroupIcon]}>
+            <Feather name="map-pin" size={20} />
+            <Text style={styles.cardBottomTitle}>Ubicación</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 };
 
@@ -190,14 +179,14 @@ const styles = StyleSheet.create({
     marginTop: 70,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginHorizontal: 100,
+    marginHorizontal: 160,
     position: 'absolute',
   },
   cardBottomTitle: {
     fontSize: 12,
     marginTop: 5,
     margin: 5,
-    color: '#fff',
+    //color: '#fff',
     fontWeight: 'bold',
   },
   cardGroupIcon: {
