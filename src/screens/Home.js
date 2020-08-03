@@ -41,9 +41,37 @@ export default function Home() {
         .catch((error) => {});
     })();
   }, []);
+
+  const handleLoadMore = async () => {
+    const resultOrders = [];
+    orders.length < totalOrders && setIsLoading(true);
+    const ordersDb = db
+      .collectionGroup('ordenes')
+      .startAfter(startOrders)
+      .limit(limitOrders);
+
+    await ordersDb.get().then((response) => {
+      if (response.docs.length > 0) {
+        setStartOrders(response.docs[response.docs.length - 1]);
+      } else {
+        setIsLoading(false);
+      }
+
+      response.forEach((doc) => {
+        let order = doc.data();
+        order.id = doc.id;
+        resultOrders.push({order});
+      });
+      setOrders([...orders, ...resultOrders]);
+    });
+  };
   return (
     <SafeAreaView>
-      <ListOrders orders={orders} isLoading={isLoading} />
+      <ListOrders
+        orders={orders}
+        isLoading={isLoading}
+        handleLoadMore={handleLoadMore}
+      />
     </SafeAreaView>
   );
 }

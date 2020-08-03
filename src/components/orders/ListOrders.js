@@ -14,7 +14,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import firebase from '../../utils/firebase';
 import 'firebase/storage';
 export default function ListOrders(props) {
-  const {orders, isLoading} = props;
+  const {orders, isLoading, handleLoadMore} = props;
   console.log('LIST_ORDERS', orders);
   return (
     <View>
@@ -23,7 +23,7 @@ export default function ListOrders(props) {
           data={orders}
           renderItem={(order) => <Order order={order} />}
           keyExtractor={(item, index) => index.toString()}
-          //onEndReached={}
+          onEndReached={handleLoadMore}
           onEndReachedThreshold={0}
           ListFooterComponent={<FooterList isLoading={isLoading} />}
         />
@@ -39,7 +39,7 @@ export default function ListOrders(props) {
 
 const Order = (props) => {
   const {order} = props;
-  const {descripcion, cantidad, uid, id} = order.item.order;
+  const {descripcion, cantidad, uid, id, date} = order.item.order;
   const [imageOrders, setImageOrder] = useState(null);
   const [loadingImage, setLoadingImage] = useState(true);
   console.log('Order_Component', order);
@@ -92,8 +92,11 @@ const Order = (props) => {
           <ActivityIndicator color="fff" animating={loadingImage} />
         </View>
         <View>
-          <Text style={styles.orderName}>{descripcion}</Text>
-          <Text style={styles.ordercant}>{`Cantidad:${cantidad}`}</Text>
+          <Text style={styles.orderName}>{descripcion.substr(0, 35)}</Text>
+          <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+            <Text style={styles.ordercant}>{`Cantidad:${cantidad}`}</Text>
+            <Text style={[styles.ordercant, {marginLeft: 100}]}>{date}</Text>
+          </View>
         </View>
         <View style={styles.cardBodyBottom}>
           <View
