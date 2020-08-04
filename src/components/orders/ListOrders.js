@@ -96,21 +96,22 @@ const Order = (props) => {
       </View>
       <View>
         <Text style={styles.orderName}>{descripcion.substr(0, 35)}</Text>
-        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+        <View>
           <Text style={styles.ordercant}>{`Cantidad:${cantidad}`}</Text>
-          <Text style={[styles.ordercant, {marginLeft: 100}]}>{date}</Text>
         </View>
       </View>
       <View style={styles.cardBodyBottom}>
-        <TouchableOpacity onPress={() => navigation.navigate('order', {order})}>
+        <TouchableOpacity
+          style={styles.detailContainer}
+          onPress={() => navigation.navigate('order', {order})}>
           <View style={[styles.cardGroupIcon]}>
-            <AntDesign name="checkcircleo" size={20} />
-            <Text style={[styles.cardBottomTitle]}>Detalle</Text>
+            {/*<AntDesign name="checkcircleo" size={20} />*/}
+            <Text style={[styles.detail]}>Detalle</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => {}}>
           <View style={[styles.cardGroupIcon]}>
-            <Feather name="map-pin" size={20} />
+            {/*<Feather name="map-pin" size={20} />*/}
             <Text style={styles.cardBottomTitle}>Ubicación</Text>
           </View>
         </TouchableOpacity>
@@ -181,13 +182,21 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginHorizontal: 160,
     position: 'absolute',
+    //nuevos
+    backgroundColor: '#8e459e',
+    padding: 2,
+    paddingHorizontal: 2,
+    borderRadius: 20,
   },
   cardBottomTitle: {
     fontSize: 12,
-    marginTop: 5,
-    margin: 5,
-    //color: '#fff',
+    marginTop: 2,
+    margin: 2,
     fontWeight: 'bold',
+    //nuevos
+    color: '#fff',
+    paddingVertical: 3,
+    paddingHorizontal: 10,
   },
   cardGroupIcon: {
     justifyContent: 'center',
@@ -204,5 +213,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'grey',
     //borderRadius: 14,
+  },
+  detailContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    overflow: 'hidden',
+  },
+  detail: {
+    paddingHorizontal: 10,
+    color: '#3C3C3C',
+    backgroundColor: '#fff',
+    paddingVertical: 3,
+    borderRadius: 20,
   },
 });
