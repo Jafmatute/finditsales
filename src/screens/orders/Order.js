@@ -12,11 +12,12 @@ import 'firebase/storage';
 //component
 import Carousel from '../../components/orders/Carousel';
 import TextTitle from '../../components/TextTitle';
+import Map from '../../components/orders/Map';
 
 const screenWidth = Dimensions.get('window').width;
 export default function Order({navigation, route}) {
   const {order} = route.params.order.item;
-  const {descripcion, cantidad, uid, id, date} = order;
+  const {descripcion, cantidad, uid, id, date, coordenadas} = order;
   const [imgOrder, setImgOrder] = useState('');
   //console.log('order', order);
 
@@ -50,7 +51,7 @@ export default function Order({navigation, route}) {
         <Item title="Fecha" value={date} />
         <View style={styles.line} />
         <Text style={styles.itemHeader}>ENTREGA</Text>
-        <Item title="Schedule" schedule />
+        <Map location={coordenadas} name={descripcion} />
         <View style={styles.line} />
         <Text style={styles.itemHeader}>MY INFO </Text>
       </View>
