@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {StyleSheet, SafeAreaView} from 'react-native';
+import {StyleSheet, SafeAreaView, KeyboardAvoidingView} from 'react-native';
 import Toast from 'react-native-easy-toast';
 
 //Component
@@ -11,7 +11,7 @@ export default function ProfileEdit({navigation, route}) {
 
   //console.log('USER_INFO', JSON.parse(userInfo));
   return (
-    <SafeAreaView style={styles.container}>
+    <KeyboardAvoidingView behavior="heigth" style={styles.container}>
       <EditForm toasRef={toasRef} userInfo={userInfo} />
       <Toast
         ref={toasRef}
@@ -21,7 +21,7 @@ export default function ProfileEdit({navigation, route}) {
         fadeOutDuration={700}
         opacity={0.8}
       />
-    </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }
 

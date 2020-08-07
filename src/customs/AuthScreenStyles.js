@@ -6,7 +6,7 @@ export default StyleSheet.create({
     padding: 10,
     justifyContent: 'center',
     backgroundColor: '#fff',
-    marginVertical: 200,
+    //marginVertical: 200,
   },
   wrapper: {
     padding: 14,
@@ -17,7 +17,8 @@ export default StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 40,
+    top: 7,
+    marginBottom: 5,
     color: '#007dd7',
   },
   btnTextForgot: {

@@ -1,8 +1,8 @@
 import React, {useRef} from 'react';
-import {SafeAreaView} from 'react-native';
+import {KeyboardAvoidingView} from 'react-native';
 import Toast from 'react-native-easy-toast';
 //component
-import {Logo} from '../../components/Logo';
+
 import SubscribeForm from '../../components/auth/SubscribeForm';
 //custom
 import AuthStyle from '../../customs/AuthScreenStyles';
@@ -10,8 +10,7 @@ import AuthStyle from '../../customs/AuthScreenStyles';
 export default function Subscription() {
   const toasRef = useRef();
   return (
-    <SafeAreaView style={AuthStyle.container}>
-      <Logo />
+    <KeyboardAvoidingView behavior="height" style={AuthStyle.container}>
       <SubscribeForm toasRef={toasRef} />
       <Toast
         ref={toasRef}
@@ -21,6 +20,6 @@ export default function Subscription() {
         fadeOutDuration={700}
         opacity={0.8}
       />
-    </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }

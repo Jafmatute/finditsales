@@ -1,11 +1,18 @@
-import React, {useState, useContext} from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
-
+import React, {useState, useEffect, useContext} from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  BackHandler,
+  Platform,
+} from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
 //import firebase
 import firebase from '../../utils/firebase';
 import 'firebase/auth';
 //components
 import {InputText} from '../Input';
+import {Logo} from '../Logo';
 //function validation
 import {validateEmail} from '../../utils/Validation';
 //custom
@@ -20,6 +27,19 @@ export default function LoginForm(props) {
     email: '',
     password: '',
   });
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const backPressed = () => {
+        BackHandler.exitApp();
+        return true;
+      };
+      BackHandler.addEventListener('hardwareBackPress', backPressed);
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', backPressed);
+      };
+    }),
+  );
 
   const {signIn} = useContext(AuthContext);
 
@@ -55,10 +75,12 @@ export default function LoginForm(props) {
     }
   };
   return (
-    <>
-      <View style={AuthStyle.wrapper}>
-        <Text style={AuthStyle.header}>Iniciar Sesión</Text>
-        <View>
+    <View>
+      <View style={[AuthStyle.wrapper, {marginTop: -50}]}>
+        <Logo />
+
+        <View style={{marginTop: 110}}>
+          {/*<Text style={AuthStyle.header}>Iniciar Sesión</Text>*/}
           <InputText
             title={'Correo Electronico'}
             text={'email'}
@@ -84,8 +106,7 @@ export default function LoginForm(props) {
             Entrar
           </Text>
         </TouchableOpacity>
-        <Text style={{textAlign: 'center', padding: 20}}>or</Text>
-        <View style={AuthStyle.ggBtn}></View>
+
         <View style={AuthStyle.footer}>
           <Text>Todavía no eres miembro,</Text>
           <TouchableOpacity onPress={() => navigation.navigate('subscribe')}>
@@ -95,6 +116,6 @@ export default function LoginForm(props) {
           </TouchableOpacity>
         </View>
       </View>
-    </>
+    </View>
   );
 }

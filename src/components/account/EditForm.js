@@ -5,6 +5,8 @@ import {
   TouchableOpacity,
   ImageBackground,
   StyleSheet,
+  SafeAreaView,
+  Platform,
 } from 'react-native';
 
 import {useTheme, Avatar} from 'react-native-paper';
@@ -81,7 +83,7 @@ export default function EditForm(props) {
   const bs = useRef();
   const fall = new Animated.Value(1);
   return (
-    <>
+    <View style={{flex: Platform.OS === 'ios' ? 1 : 0}}>
       <BottomSheet
         ref={bs}
         snapPoints={[330, 0]}
@@ -93,78 +95,77 @@ export default function EditForm(props) {
         callbackNode={fall}
         enabledGestureInteraction={true}
       />
-      <View style={styles.container}>
-        <Animated.View
-          style={{
-            margin: 20,
-            opacity: Animated.add(0.2, Animated.multiply(fall, 1.0)),
-          }}>
-          <View style={{alignItems: 'center'}}>
-            <TouchableOpacity onPress={() => bs.current.snapTo(0)}>
-              <View style={styles.viewImageBackground}>
-                {!image ? (
-                  <>
-                    <AvatarText size={100} />
 
-                    <View style={styles.viewIconImage}>
-                      <Icon
-                        name="camera"
-                        size={35}
-                        color="#fff"
-                        style={[styles.iconImageBackground, {marginTop: -100}]}
-                      />
-                    </View>
-                  </>
-                ) : (
-                  <ImageBackground
-                    source={{
-                      uri: image,
-                    }}
-                    style={{height: 100, width: 100}}
-                    imageStyle={{borderRadius: 50}}>
-                    <View style={styles.viewIconImage}>
-                      <Icon
-                        name="camera"
-                        size={35}
-                        color="#fff"
-                        style={styles.iconImageBackground}
-                      />
-                    </View>
-                  </ImageBackground>
-                )}
-              </View>
-            </TouchableOpacity>
-            <Text style={styles.userInfo}>{userInfo_.email}</Text>
-          </View>
+      <Animated.View
+        style={{
+          margin: 20,
+          opacity: Animated.add(0.2, Animated.multiply(fall, 1.0)),
+        }}>
+        <View style={{alignItems: 'center'}}>
+          <TouchableOpacity onPress={() => bs.current.snapTo(0)}>
+            <View style={styles.viewImageBackground}>
+              {!image ? (
+                <>
+                  <AvatarText size={100} />
 
-          <View>
-            <InputText
-              title={'Nombre Completo'}
-              text={'name'}
-              onChange={onChange_text}
-              icon={'check'}
-            />
-            <InputText
-              title={'Ciudad'}
-              text={'city'}
-              onChange={onChange_text}
-              icon={'check'}
-            />
-            <InputText
-              title={'Biografía'}
-              text={'biography'}
-              onChange={onChange_text}
-              icon={'check'}
-            />
-          </View>
-          <TouchableOpacity
-            style={styles.commandButton}
-            onPress={onSubmitEditProfile}>
-            <Text style={styles.panelButtonTitle}>Guardar</Text>
+                  <View style={styles.viewIconImage}>
+                    <Icon
+                      name="camera"
+                      size={35}
+                      color="#fff"
+                      style={[styles.iconImageBackground, {marginTop: -100}]}
+                    />
+                  </View>
+                </>
+              ) : (
+                <ImageBackground
+                  source={{
+                    uri: image,
+                  }}
+                  style={{height: 100, width: 100}}
+                  imageStyle={{borderRadius: 50}}>
+                  <View style={styles.viewIconImage}>
+                    <Icon
+                      name="camera"
+                      size={35}
+                      color="#fff"
+                      style={styles.iconImageBackground}
+                    />
+                  </View>
+                </ImageBackground>
+              )}
+            </View>
           </TouchableOpacity>
-        </Animated.View>
-      </View>
-    </>
+          <Text style={styles.userInfo}>{userInfo_.email}</Text>
+        </View>
+
+        <View>
+          <InputText
+            title={'Nombre Completo'}
+            text={'name'}
+            onChange={onChange_text}
+            icon={'check'}
+          />
+          <InputText
+            title={'Ciudad'}
+            text={'city'}
+            onChange={onChange_text}
+            icon={'check'}
+          />
+          <InputText
+            title={'Biografía'}
+            text={'biography'}
+            onChange={onChange_text}
+            icon={'check'}
+          />
+        </View>
+        <TouchableOpacity
+          style={styles.commandButton}
+          onPress={onSubmitEditProfile}>
+          <Text style={styles.panelButtonTitle}>Guardar</Text>
+        </TouchableOpacity>
+      </Animated.View>
+    </View>
   );
 }
 
@@ -177,6 +178,9 @@ function defaultForm() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   viewImageBackground: {
     height: 100,
     width: 100,

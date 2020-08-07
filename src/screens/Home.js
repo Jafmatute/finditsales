@@ -1,5 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {StyleSheet, Text, SafeAreaView} from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
 import firebase from '../utils/firebase';
 
 import 'firebase/firestore';
@@ -23,26 +24,25 @@ export default function Home() {
     snapShot.then((response) => {
       setTotalOrders(response.size);
     });
-    (async () => {
-      const resultOrders = [];
-      const orders_ = db.collectionGroup('ordenes').limit(limitOrders);
 
-      await orders_
-        .get()
-        .then((response) => {
-          setStartOrders(response.docs[response.docs.length - 1]);
-          response.forEach((doc) => {
-            let order = doc.data();
-            order.id = doc.id;
-            resultOrders.push({order});
-          });
-          setOrders(resultOrders);
-        })
-        .catch((error) => {});
-    })();
+    const resultOrders = [];
+    const orders_ = db.collectionGroup('ordenes').limit(limitOrders);
+
+    orders_
+      .get()
+      .then((response) => {
+        setStartOrders(response.docs[response.docs.length - 1]);
+        response.forEach((doc) => {
+          let order = doc.data();
+          order.id = doc.id;
+          resultOrders.push({order});
+        });
+        setOrders(resultOrders);
+      })
+      .catch((error) => {});
   }, []);
 
-  const handleLoadMore = async () => {
+  const handleLoadMore = () => {
     const resultOrders = [];
     orders.length < totalOrders && setIsLoading(true);
     const ordersDb = db
@@ -50,7 +50,7 @@ export default function Home() {
       .startAfter(startOrders)
       .limit(limitOrders);
 
-    await ordersDb.get().then((response) => {
+    ordersDb.get().then((response) => {
       if (response.docs.length > 0) {
         setStartOrders(response.docs[response.docs.length - 1]);
       } else {

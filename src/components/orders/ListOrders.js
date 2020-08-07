@@ -10,25 +10,24 @@ import {
   Dimensions,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Feather from 'react-native-vector-icons/Feather';
 import firebase from '../../utils/firebase';
 import 'firebase/storage';
 export default function ListOrders(props) {
   const {orders, isLoading, handleLoadMore} = props;
   const navigation = useNavigation();
   //console.log('LIST_ORDERS', orders);
+  console.log('TAMAÑO LENGHT', orders.length);
   return (
     <View>
-      {orders ? (
+      {orders.length > 0 ? (
         <FlatList
           data={orders}
           renderItem={(order) => (
             <Order order={order} navigation={navigation} />
           )}
           keyExtractor={(item, index) => index.toString()}
+          onEndReachedThreshold={0.5}
           onEndReached={handleLoadMore}
-          onEndReachedThreshold={0}
           ListFooterComponent={<FooterList isLoading={isLoading} />}
         />
       ) : (
@@ -206,6 +205,8 @@ const styles = StyleSheet.create({
   loaderOrder: {
     marginTop: 10,
     marginBottom: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   notFoundOrders: {
     marginTop: 10,

@@ -1,8 +1,9 @@
-import React, {useState, useRef, createRef} from 'react';
+import React, {useState, useRef} from 'react';
 import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 //component
 import {InputText} from '../Input';
+import {Logo} from '../Logo';
 //custom
 import AuthStyle from '../../customs/AuthScreenStyles';
 
@@ -57,68 +58,76 @@ export default function SubscribeForm(props) {
   };
 
   return (
-    <>
-      <View style={AuthStyle.wrapper}>
-        <Text style={[AuthStyle.header]}>{'Suscripción findit'}</Text>
-        <ScrollView
-          ref={scrollviewDown}
-          onLayout={(event) => {
-            var {y} = event.nativeEvent.layout;
-            setScroll(y);
-          }}>
-          <View>
-            <InputText
-              title={'Nombre de la empresa'}
-              text={'business'}
-              onChange={onChange_text}
-            />
-            <InputText title={'RTN'} text={'rtn'} onChange={onChange_text} />
-            <InputText
-              title={'Correo empresa'}
-              text={'email'}
-              icon={'email'}
-              onChange={onChange_text}
-            />
-            <InputText
-              title={'Teléfono'}
-              text={'phone'}
-              icon={'phone'}
-              onChange={onChange_text}
-            />
-            <InputText
-              title={'Contacto'}
-              text={'contact'}
-              icon={'contact'}
-              onChange={onChange_text}
-            />
-          </View>
-        </ScrollView>
-        <View style={{marginLeft: 170}}>
-          {!scrollview ? (
-            <Feather
-              name="arrow-down"
-              size={30}
-              color="grey"
-              onPress={scrollBottom}
-            />
-          ) : (
-            <Feather
-              name="arrow-up"
-              size={30}
-              color="grey"
-              onPress={scrollBottomUp}
-            />
-          )}
+    <View style={AuthStyle.wrapper}>
+      <Logo />
+
+      <ScrollView
+        style={{marginTop: 100}}
+        ref={scrollviewDown}
+        onLayout={(event) => {
+          var {y} = event.nativeEvent.layout;
+          setScroll(y);
+        }}>
+        <View>
+          <Text style={[AuthStyle.header]}>Suscripción findit</Text>
+          <InputText
+            title={'Nombre de la empresa'}
+            text={'business'}
+            onChange={onChange_text}
+          />
+          <InputText title={'RTN'} text={'rtn'} onChange={onChange_text} />
+          <InputText
+            title={'Correo empresa'}
+            text={'email'}
+            icon={'email'}
+            onChange={onChange_text}
+          />
+          <InputText
+            title={'Teléfono'}
+            text={'phone'}
+            icon={'phone'}
+            onChange={onChange_text}
+          />
+          <InputText
+            title={'Contacto'}
+            text={'contact'}
+            icon={'contact'}
+            onChange={onChange_text}
+          />
         </View>
-        <TouchableOpacity
-          onPress={onSubmitSubscribe}
-          style={[AuthStyle.btn, {marginTop: 30}]}>
-          <Text style={[AuthStyle.btnTextForgot, {color: 'white'}]}>
-            Entrar
-          </Text>
-        </TouchableOpacity>
+      </ScrollView>
+
+      <View
+        style={{
+          alignItems: 'center',
+          position: 'relative',
+          bottom: 20,
+          paddingTop: 20,
+        }}>
+        {!scrollview ? (
+          <Feather
+            name="arrow-down"
+            size={30}
+            color="grey"
+            onPress={scrollBottom}
+          />
+        ) : (
+          <Feather
+            name="arrow-up"
+            size={30}
+            color="grey"
+            onPress={scrollBottomUp}
+          />
+        )}
       </View>
-    </>
+      <TouchableOpacity
+        onPress={onSubmitSubscribe}
+        style={[AuthStyle.btn, {bottom: 20}]}>
+        <Text style={[AuthStyle.btnTextForgot, {color: 'white'}]}>
+          Enviar Subscripción
+        </Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 function formDefault() {
