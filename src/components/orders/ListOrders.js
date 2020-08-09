@@ -7,16 +7,17 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Image,
-  Dimensions,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import firebase from '../../utils/firebase';
 import 'firebase/storage';
+//custom
+import orderStyle from '../../customs/OrderScreenStyles';
 export default function ListOrders(props) {
   const {orders, isLoading, handleLoadMore} = props;
   const navigation = useNavigation();
   //console.log('LIST_ORDERS', orders);
-  console.log('TAMAÑO LENGHT', orders.length);
+  //console.log('TAMAÑO LENGHT', orders.length);
   return (
     <View>
       {orders.length > 0 ? (
@@ -42,7 +43,7 @@ export default function ListOrders(props) {
 
 const Order = (props) => {
   const {order, navigation} = props;
-  const {descripcion, cantidad, uid, id, date} = order.item.order;
+  const {descripcion, cantidad, uid, id, date, time} = order.item.order;
   const [imageOrders, setImageOrder] = useState(null);
   const [loadingImage, setLoadingImage] = useState(true);
   //console.log('Order_Component', order);
@@ -93,25 +94,25 @@ const Order = (props) => {
         />
         <ActivityIndicator color="fff" animating={loadingImage} />
       </View>
+      {/*Información del pedido cardet*/}
       <View>
-        <Text style={styles.orderName}>{descripcion.substr(0, 35)}</Text>
-        <View>
-          <Text style={styles.ordercant}>{`Cantidad:${cantidad}`}</Text>
+        <Text style={orderStyle.itemHeader}>{descripcion.substr(0, 35)}</Text>
+        <View style={orderStyle.line} />
+        <View style={styles.viewCantFech}>
+          <Text style={styles.order}>{`Cantidad:${cantidad}`}</Text>
+          <Text style={[styles.order, {marginHorizontal: 90}]}>{date}</Text>
         </View>
+        <Text style={[styles.order, {top: -10}]}>{` ${time}`}</Text>
+        <View style={orderStyle.line} />
       </View>
+      {/*Fin información del epdido cardet*/}
       <View style={styles.cardBodyBottom}>
         <TouchableOpacity
-          style={styles.detailContainer}
+          style={orderStyle.itemTextActiveContainer}
           onPress={() => navigation.navigate('order', {order})}>
-          <View style={[styles.cardGroupIcon]}>
+          <View>
             {/*<AntDesign name="checkcircleo" size={20} />*/}
-            <Text style={[styles.detail]}>Detalle</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}}>
-          <View style={[styles.cardGroupIcon]}>
-            {/*<Feather name="map-pin" size={20} />*/}
-            <Text style={styles.cardBottomTitle}>Ubicación</Text>
+            <Text style={orderStyle.textActive}>Detalle</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -138,7 +139,6 @@ const FooterList = (props) => {
   }
 };
 
-const W = Dimensions.get('window').width / 4;
 const styles = StyleSheet.create({
   loadinOrders: {
     marginTop: 20,
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
   },
   viewOrder: {
     flexDirection: 'row',
-    //margin: 10,
+
     //nuevos
     borderRadius: 8,
     margin: 5,
@@ -160,26 +160,28 @@ const styles = StyleSheet.create({
   },
   viewOrderImg: {
     marginRight: 15,
+    marginVertical: 15,
   },
   imageOrders: {
-    width: 80,
-    height: 80,
-    //width: W,
-    //height: W,
+    width: 60,
+    height: 60,
     borderRadius: 8,
   },
-  orderName: {
-    fontWeight: 'bold',
+  viewCantFech: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
   },
-  ordercant: {
+  order: {
     paddingTop: 2,
     color: 'grey',
   },
   cardBodyBottom: {
-    marginTop: 70,
+    marginTop: 75,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginHorizontal: 160,
+    marginHorizontal: 245,
     position: 'absolute',
     //nuevos
     backgroundColor: '#8e459e',
@@ -197,11 +199,6 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     paddingHorizontal: 10,
   },
-  cardGroupIcon: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 10,
-  },
   loaderOrder: {
     marginTop: 10,
     marginBottom: 10,
@@ -213,18 +210,5 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     alignItems: 'center',
     backgroundColor: 'grey',
-    //borderRadius: 14,
-  },
-  detailContainer: {
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    overflow: 'hidden',
-  },
-  detail: {
-    paddingHorizontal: 10,
-    color: '#3C3C3C',
-    backgroundColor: '#fff',
-    paddingVertical: 3,
-    borderRadius: 20,
   },
 });

@@ -1,8 +1,6 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import {StyleSheet, Text, SafeAreaView} from 'react-native';
-import {useFocusEffect} from '@react-navigation/native';
+import React, {useState, useEffect} from 'react';
+import {StyleSheet, SafeAreaView} from 'react-native';
 import firebase from '../utils/firebase';
-
 import 'firebase/firestore';
 
 //component
@@ -16,8 +14,7 @@ export default function Home() {
   const [startOrders, setStartOrders] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [totalOrders, setTotalOrders] = useState(0);
-  const [uidOrders, setUidOrders] = useState([]);
-  const limitOrders = 8;
+  const limitOrders = 10;
 
   useEffect(() => {
     const snapShot = db.collection('Orders').get();
@@ -26,7 +23,11 @@ export default function Home() {
     });
 
     const resultOrders = [];
-    const orders_ = db.collectionGroup('ordenes').limit(limitOrders);
+    const orders_ = db
+      .collectionGroup('ordenes')
+      .where('estado', '==', 1)
+      .orderBy('date', 'desc')
+      .limit(limitOrders);
 
     orders_
       .get()
@@ -39,7 +40,9 @@ export default function Home() {
         });
         setOrders(resultOrders);
       })
-      .catch((error) => {});
+      .catch((error) => {
+        console.log('collectionGroups', error);
+      });
   }, []);
 
   const handleLoadMore = () => {
@@ -47,6 +50,8 @@ export default function Home() {
     orders.length < totalOrders && setIsLoading(true);
     const ordersDb = db
       .collectionGroup('ordenes')
+      .where('estado', '==', 1)
+      .orderBy('date', 'desc')
       .startAfter(startOrders)
       .limit(limitOrders);
 
