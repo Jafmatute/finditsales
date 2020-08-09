@@ -1,10 +1,10 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   BackHandler,
-  Platform,
+  ScrollView,
 } from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
 //import firebase
@@ -75,46 +75,42 @@ export default function LoginForm(props) {
     }
   };
   return (
-    <View>
-      <View style={[AuthStyle.wrapper, {marginTop: -50}]}>
-        <Logo />
+    <View style={[AuthStyle.wrapper]}>
+      <Logo />
 
-        <View style={{marginTop: 110}}>
-          {/*<Text style={AuthStyle.header}>Iniciar Sesión</Text>*/}
-          <InputText
-            title={'Correo Electronico'}
-            text={'email'}
-            onChange={onChange_text}
-          />
-          <InputText
-            secureTextEntry
-            title={'Contraseña'}
-            icon={'password'}
-            text={'password'}
-            onChange={onChange_text}
-          />
-        </View>
+      <ScrollView style={{marginTop: 100}}>
+        {/*<Text style={AuthStyle.header}>Iniciar Sesión</Text>*/}
+        <InputText
+          title={'Correo Electronico'}
+          text={'email'}
+          onChange={onChange_text}
+        />
+        <InputText
+          secureTextEntry
+          title={'Contraseña'}
+          icon={'password'}
+          text={'password'}
+          onChange={onChange_text}
+        />
+      </ScrollView>
 
-        <View style={AuthStyle.forgotContainer}>
-          <TouchableOpacity>
-            <Text style={AuthStyle.btnTextForgot}>Recuperar contraseña ?</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={AuthStyle.forgotContainer}>
+        <TouchableOpacity>
+          <Text style={AuthStyle.btnTextForgot}>Recuperar contraseña ?</Text>
+        </TouchableOpacity>
+      </View>
 
-        <TouchableOpacity onPress={onSubmitLogin} style={AuthStyle.btn}>
-          <Text style={[AuthStyle.btnTextForgot, {color: 'white'}]}>
-            Entrar
+      <TouchableOpacity onPress={onSubmitLogin} style={AuthStyle.btn}>
+        <Text style={[AuthStyle.btnTextForgot, {color: 'white'}]}>Entrar</Text>
+      </TouchableOpacity>
+
+      <View style={AuthStyle.footer}>
+        <Text>Todavía no eres miembro,</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('subscribe')}>
+          <Text style={[AuthStyle.btnTextForgot, {color: '#007dd7'}]}>
+            Suscribete.
           </Text>
         </TouchableOpacity>
-
-        <View style={AuthStyle.footer}>
-          <Text>Todavía no eres miembro,</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('subscribe')}>
-            <Text style={[AuthStyle.btnTextForgot, {color: '#007dd7'}]}>
-              Suscribete.
-            </Text>
-          </TouchableOpacity>
-        </View>
       </View>
     </View>
   );

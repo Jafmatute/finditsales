@@ -12,7 +12,7 @@ export default function SingIn({navigation}) {
   const toasRef = useRef();
 
   return (
-    <KeyboardAvoidingView behavior="padding" style={AuthStyle.container}>
+    <KeyboardAvoidingView behavior="height" style={AuthStyle.container}>
       <LoginForm toasRef={toasRef} navigation={navigation} />
       <Toast
         ref={toasRef}

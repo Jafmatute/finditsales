@@ -84,7 +84,7 @@ const Order = (props) => {
   };
 
   return (
-    <View style={styles.viewOrder}>
+    <View style={orderStyle.viewCard}>
       <View style={styles.viewOrderImg}>
         <Image
           style={styles.imageOrders}
@@ -144,23 +144,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     alignItems: 'center',
   },
-  viewOrder: {
-    flexDirection: 'row',
-
-    //nuevos
-    borderRadius: 8,
-    margin: 5,
-    padding: 10,
-    paddingBottom: 0,
-    backgroundColor: '#fff',
-    shadowOpacity: 0.14,
-    shadowRadius: 4,
-    shadowColor: '#000',
-    shadowOffset: {height: 0, width: 0},
-  },
   viewOrderImg: {
     marginRight: 15,
     marginVertical: 15,
+    paddingTop: 10,
   },
   imageOrders: {
     width: 60,

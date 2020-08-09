@@ -15,7 +15,8 @@ import Profile from '../screens/account/Profile';
 import ProfileEdit from '../screens/account/ProfileEdit';
 //orders screen
 import Order from '../screens/orders/Order';
-
+//Offerts screen
+import Offert from '../screens/offerts/Offert';
 //component
 import AvatarText from '../components/account/AvatarText';
 
@@ -112,6 +113,7 @@ function StackNavigation({navigation}) {
           return {headerTitle: title};
         }}
       />
+      <Stack.Screen name="offert" component={Offert} />
     </Stack.Navigator>
   );
 }

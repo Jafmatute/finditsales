@@ -6,6 +6,7 @@ import {
   Dimensions,
   ActivityIndicator,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import firebase from '../../utils/firebase';
@@ -25,8 +26,8 @@ firebase.firestore().settings({experimentalForceLongPolling: true});
 const db = firebase.firestore(firebase);
 
 export default function DetailOrder(props) {
-  const {order} = props;
-  const {descripcion, cantidad, uid, idCar, date} = order;
+  const {order, navigation} = props;
+  const {descripcion, cantidad, uid, id, idCar, date} = order;
   const [imgOrder, setImgOrder] = useState('');
   const [resultProfile, setresultprofile] = useState({});
   const {VIN, marca, modelo, serie, tipo} = resultProfile;
@@ -72,7 +73,7 @@ export default function DetailOrder(props) {
           <Item title="Fecha" value={date} />
           <View style={orderStyle.line} />
           <Text style={orderStyle.itemHeader}>OFERTAR</Text>
-          <Item title="Findit" sale />
+          <Item title="Findit" id={id} sale navigation={navigation} />
           <View style={orderStyle.line} />
           <Text style={orderStyle.itemHeader}>INFORMACIÓN VEHICULO </Text>
           <Item title="VIN" value={VIN} />
@@ -85,12 +86,15 @@ export default function DetailOrder(props) {
     </ScrollView>
   );
 }
-const Item = ({title, value, sale}) => {
+const Item = ({title, value, sale, id, navigation}) => {
+  console.log('ITEM', navigation);
   return (
     <View style={styles.item}>
       <TextTitle style={styles.itemTitle}>{title}</TextTitle>
       {sale ? (
-        <View style={styles.itemSchedule}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('offert', {id})}
+          style={styles.itemSchedule}>
           <View style={orderStyle.itemTextActiveContainer}>
             <TextTitle style={orderStyle.textActive}>
               Sí, quiero ofertar
@@ -101,7 +105,7 @@ const Item = ({title, value, sale}) => {
             name="send-circle-outline"
             size={25}
           />
-        </View>
+        </TouchableOpacity>
       ) : (
         <Text style={styles.itemValue}>{value}</Text>
       )}

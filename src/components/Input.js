@@ -17,19 +17,24 @@ export const InputText = ({
   text,
   onChange,
   keyboardType,
+  is_valid,
   //check,
   //onChangeText,
 }) => {
   const [securePassword, setSecurePassword] = useState(secureTextEntry);
   const [check, setCheck] = useState(false);
   const [isvalid, setIsValid] = useState(true);
-  const onChange_check = (e) => {
-    if (e.trim().length >= 6) {
-      setCheck(true);
-      setIsValid(true);
+  const onChange_check = (e, valid) => {
+    if (valid == undefined) {
+      if (e.trim().length >= 6) {
+        setCheck(true);
+        setIsValid(true);
+      } else {
+        setCheck(false);
+        setIsValid(false);
+      }
     } else {
-      setCheck(false);
-      setIsValid(false);
+      setIsValid(true);
     }
   };
 
@@ -52,7 +57,9 @@ export const InputText = ({
 
   return (
     <>
-      <Text style={[styles.title]}> {title ? title : ''} </Text>
+      <View>
+        <Text style={[styles.title]}> {title ? title : ''} </Text>
+      </View>
       <View style={styles.action}>
         <TextInput
           placeholder={placeholder}
@@ -61,7 +68,7 @@ export const InputText = ({
           style={styles.textInput}
           autoCapitalize="none"
           onChange={(e) => onChange(e, text)}
-          onChangeText={(e) => onChange_check(e)}
+          onChangeText={(e) => onChange_check(e, is_valid)}
           keyboardType={keyboardType}
         />
 
@@ -92,7 +99,8 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
   },
   title: {
-    marginVertical: 10,
+    marginVertical: 7,
+    bottom: -10,
   },
   tex_footer: {
     color: '#05375a',
@@ -101,9 +109,9 @@ const styles = StyleSheet.create({
   action: {
     flexDirection: 'row',
     marginTop: 10,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
     borderBottomColor: 'grey',
-    paddingBottom: 5,
+    paddingBottom: -10,
   },
   textInput: {
     flex: 1,
