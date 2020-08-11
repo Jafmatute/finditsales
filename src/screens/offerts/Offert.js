@@ -9,7 +9,7 @@ export default function Offert({navigation, route}) {
   const {id} = route.params;
   return (
     <KeyboardAvoidingView behavior="height" style={styles.container}>
-      <OffertForm toasRef={toasRef} id={id} />
+      <OffertForm toasRef={toasRef} id={id} navigation={navigation} />
       <Toast
         ref={toasRef}
         style={{backgroundColor: 'red'}}

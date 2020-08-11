@@ -86,7 +86,7 @@ export default function EditForm(props) {
     <View style={{flex: Platform.OS === 'ios' ? 1 : 0}}>
       <BottomSheet
         ref={bs}
-        snapPoints={[330, 0]}
+        snapPoints={[330, -50, 0]}
         initialSnap={1}
         renderHeader={renderHeader}
         renderContent={() =>

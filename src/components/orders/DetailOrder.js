@@ -14,7 +14,7 @@ import 'firebase/storage';
 import 'firebase/firestore';
 
 //component
-import Carousel from './Carousel';
+import {Carousel} from './Carousel';
 import TextTitle from '../TextTitle';
 
 //custom

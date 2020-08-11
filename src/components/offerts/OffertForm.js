@@ -12,10 +12,10 @@ import offertStyle from '../../customs/OrderScreenStyles';
 const db = firebase.firestore(firebase);
 export default function OffertForm(props) {
   const [formOffert, setFormOffert] = useState(defaultForm());
-  const [value, setValue] = React.useState('Original');
+  const [value, setValue] = useState('Original');
   const [uid, setUid] = useState();
   const [message, setMessage] = useState();
-  const {toasRef, id} = props;
+  const {toasRef, id, navigation} = props;
 
   useEffect(() => {
     const uid = firebase.auth().currentUser.uid;
@@ -26,12 +26,12 @@ export default function OffertForm(props) {
     setFormOffert({...formOffert, [type]: e.nativeEvent.text});
   };
   const obSubmitOffert = () => {
-    setMessage('PROCESANDO OFERTA..');
     const data = {
       ...formOffert,
       idOrder: id,
       uid: uid,
       product: value,
+      estado: 'pendiente',
       createAt: new Date(),
     };
     const {price, brand, garant, product} = data;
@@ -41,9 +41,10 @@ export default function OffertForm(props) {
       toasRef.current.show('Precio Vació.', 2000);
     } else if (brand.length < 4) {
       toasRef.current.show('Marca, debe tener mínimo 4 caracteres', 2000);
-    } else if (garant.length <= 6) {
-      toasRef.current.show('Ingrese la garantía', 2000);
+    } else if (garant.length < 5) {
+      toasRef.current.show('Ingrese los días de garantía ó meses, años ', 2000);
     } else {
+      setMessage('PROCESANDO OFERTA..');
       let ref = db.collection('Offert').doc(uid).collection('ofertas').doc();
       db.collection('Offert')
         .doc(uid)
@@ -56,6 +57,9 @@ export default function OffertForm(props) {
         .set(data)
         .then((response) => {
           setMessage('GRACIAS, SU OFERTA FUE ENVIADA CON ÉXITO!');
+          setTimeout(() => {
+            navigation.goBack();
+          }, 2000);
         })
         .catch((error) => {
           console.log('firebase offert', error);
@@ -110,6 +114,7 @@ export default function OffertForm(props) {
           text={'garant'}
           onChange={onChange_text}
           icon={'check'}
+          is_valid={false}
         />
 
         <TouchableOpacity onPress={obSubmitOffert} style={styles.btn}>

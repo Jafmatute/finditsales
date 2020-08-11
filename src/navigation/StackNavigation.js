@@ -108,12 +108,17 @@ function StackNavigation({navigation}) {
         name="order"
         component={Order}
         options={({route}) => {
-          console.log('OK_ORDER', route);
           const title = route.params.order.item.order.descripcion;
           return {headerTitle: title};
         }}
       />
-      <Stack.Screen name="offert" component={Offert} />
+      <Stack.Screen
+        name="offert"
+        component={Offert}
+        options={{
+          title: '',
+        }}
+      />
     </Stack.Navigator>
   );
 }

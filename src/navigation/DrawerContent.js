@@ -58,14 +58,6 @@ export default function DrawerContent(props) {
               )}
               onPress={() => onchangeScreen('profile')}
             />
-
-            <DrawerItem
-              label="Ubicaciones"
-              icon={({color, size}) => (
-                <Icon name="bookmark" color={color} size={size} />
-              )}
-              onPress={() => {}}
-            />
             <DrawerItem
               label="Configuraciones"
               icon={({color, size}) => (
