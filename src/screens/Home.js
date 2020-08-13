@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {StyleSheet, SafeAreaView} from 'react-native';
+import {SafeAreaView} from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
 import firebase from '../utils/firebase';
 import 'firebase/firestore';
@@ -19,15 +19,18 @@ export default function Home() {
 
   useFocusEffect(
     useCallback(() => {
-      db.collection('Orders')
-        .get()
-        .then((response) => {
-          setTotalOrders(response.size);
-          console.log('COUNTS', response.size);
-        });
+      (async () => {
+        db.collection('Orders')
+          .get()
+          .then((snap) => {
+            setTotalOrders(snap.size);
+            console.log('COUNTS', snap.size);
+          });
+      })();
       (async () => {
         const resultOrders = [];
-        db.collectionGroup('ordenes')
+        await db
+          .collectionGroup('ordenes')
           .where('estado', '==', 1)
           .orderBy('date', 'desc')
           .limit(limitOrders)
@@ -84,5 +87,3 @@ export default function Home() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({});

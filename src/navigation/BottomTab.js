@@ -2,8 +2,6 @@ import React from 'react';
 import color from 'color';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {useTheme} from 'react-native-paper';
-import {useSafeArea} from 'react-native-safe-area-context';
-import {useIsFocused} from '@react-navigation/native';
 
 //animaciones
 import overlay from '../context/overlay';
@@ -15,23 +13,21 @@ import Sales from '../screens/Sales';
 
 const Tab = createMaterialBottomTabNavigator();
 
-function BottomTab() {
+const BottomTab = () => {
   const theme = useTheme();
-  const safeArea = useSafeArea();
-  const isFocused = useIsFocused();
 
   const tabBarColor = theme.dark
     ? overlay(6, theme.colors.surface)
     : theme.colors.surface;
   return (
-    <>
+    <React.Fragment>
       <Tab.Navigator
         initialRouteName="home"
         backBehavior="initialRoute"
         shifting={true}
         activeColor={theme.colors.primary}
         inactiveColor={color(theme.colors.text).alpha(0.6).rgb().string()}
-        sceneAnimationEnabled={true}>
+        sceneAnimationEnabled={false}>
         <Tab.Screen
           name="home"
           component={Home}
@@ -58,8 +54,8 @@ function BottomTab() {
           }}
         />
       </Tab.Navigator>
-    </>
+    </React.Fragment>
   );
-}
+};
 
 export default BottomTab;

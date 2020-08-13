@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {DrawerItem, DrawerContentScrollView} from '@react-navigation/drawer';
 
@@ -9,7 +9,6 @@ import {
   Text,
   TouchableRipple,
   Switch,
-  Avatar,
 } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -20,6 +19,7 @@ import AvatarText from '../components/account/AvatarText';
 
 export default function DrawerContent(props) {
   const {navigation} = props;
+  console.log('DRAWER-CONTENT', navigation);
   const {signOut} = useContext(AuthContext);
 
   const onchangeScreen = (screen) => {

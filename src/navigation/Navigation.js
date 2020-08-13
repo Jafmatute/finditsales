@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, Platform, Dimensions, View} from 'react-native';
+import {Text, Platform, View} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {useTheme} from 'react-native-paper';
 
@@ -13,10 +13,7 @@ import Splash from '../screens/auth/Splash';
 
 const Navigation = () => {
   const {colors} = useTheme();
-  const {height} = Dimensions.get('screen');
-  const {width} = Dimensions.get('screen');
-  const height_title = height * 0.12;
-  const width_title = width * 0.2;
+
   return (
     <Stack.Navigator
       //headerMode="none"

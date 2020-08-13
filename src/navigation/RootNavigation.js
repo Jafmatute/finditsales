@@ -17,7 +17,7 @@ const Drawer = createDrawerNavigator();
 
 const RootNavigation = () => {
   const initialLoginState = {
-    isLoading: false,
+    isLoading: true,
     userToken: null,
     email: null,
   };
@@ -30,7 +30,6 @@ const RootNavigation = () => {
           userToken: action.token,
           isLoading: false,
         };
-        break;
       case 'LOGIN':
         return {
           ...prevState,
@@ -38,7 +37,6 @@ const RootNavigation = () => {
           email: action.uid,
           isLoading: false,
         };
-        break;
       case 'LOGOUT':
         return {
           ...prevState,
@@ -46,7 +44,6 @@ const RootNavigation = () => {
           email: null,
           isLoading: false,
         };
-        break;
       case 'REGISTER':
         return {
           ...prevState,
@@ -132,7 +129,7 @@ const RootNavigation = () => {
         {loginState.userToken ? (
           <Drawer.Navigator
             drawerContent={(props) => <DrawerContent {...props} />}>
-            <Drawer.Screen name="signin" component={StackNavigation} />
+            <Drawer.Screen name="home" component={StackNavigation} />
           </Drawer.Navigator>
         ) : (
           <Navigation />
