@@ -87,7 +87,6 @@ export default function DetailOrder(props) {
   );
 }
 const Item = ({title, value, sale, id, navigation}) => {
-  console.log('ITEM', navigation);
   return (
     <View style={styles.item}>
       <TextTitle style={styles.itemTitle}>{title}</TextTitle>

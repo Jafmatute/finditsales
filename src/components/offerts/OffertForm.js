@@ -68,7 +68,9 @@ export default function OffertForm(props) {
   };
 
   return (
-    <ScrollView style={styles.viewFormOffert}>
+    <ScrollView
+      keyboardShouldPersistTaps="always"
+      style={styles.viewFormOffert}>
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
         <Avatar.Image source={logo} size={50} />
         <Title style={{fontWeight: 'bold', bottom: 10, top: 2}}>

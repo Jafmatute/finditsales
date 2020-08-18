@@ -76,7 +76,6 @@ export default function Home() {
         setOrders([...orders, ...resultOrders]);
       });
   };
-
   return (
     <SafeAreaView>
       <ListOrders
