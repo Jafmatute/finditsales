@@ -28,7 +28,7 @@ const Navigation = () => {
           color: '#007dd7',
         },
       }}>
-      <Stack.Screen name="splash" options={{title: ''}} component={Splash} />
+      {/*<Stack.Screen name="splash" options={{title: ''}} component={Splash} />*/}
       <Stack.Screen
         name="signin"
         options={{

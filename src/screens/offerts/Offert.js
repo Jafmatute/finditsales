@@ -6,13 +6,28 @@ import OffertForm from '../../components/offerts/OffertForm';
 
 export default function Offert({navigation, route}) {
   const toasRef = useRef();
+  const toasRefSuccess = useRef();
   const {id} = route.params;
   return (
     <KeyboardAvoidingView behavior="height" style={styles.container}>
-      <OffertForm toasRef={toasRef} id={id} navigation={navigation} />
+      <OffertForm
+        toasRef={toasRef}
+        toasRefSuccess={toasRefSuccess}
+        id={id}
+        navigation={navigation}
+      />
       <Toast
         ref={toasRef}
         style={{backgroundColor: 'red'}}
+        position="top"
+        positionValue={300}
+        fadeInDuration={500}
+        fadeOutDuration={700}
+        opacity={0.8}
+      />
+      <Toast
+        ref={toasRefSuccess}
+        style={{backgroundColor: 'green'}}
         position="top"
         positionValue={300}
         fadeInDuration={500}

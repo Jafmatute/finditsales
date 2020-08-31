@@ -1,69 +1,155 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, ScrollView, TouchableOpacity} from 'react-native';
-import {RadioButton, Text, Title, Avatar} from 'react-native-paper';
+import React, {useState, useEffect, useRef} from 'react';
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  FlatList,
+  TextInput,
+  Platform,
+} from 'react-native';
+import Icon from 'react-native-vector-icons/AntDesign';
+import {Text, Title, Avatar, RadioButton} from 'react-native-paper';
 import firebase from '../../utils/firebase';
 import 'firebase/firestore';
 //component
-import {InputText} from '../Input';
+
 import logo from '../../assets/img/findit-1.png';
-//custom
-import offertStyle from '../../customs/OrderScreenStyles';
 
 const db = firebase.firestore(firebase);
 export default function OffertForm(props) {
   const [formOffert, setFormOffert] = useState(defaultForm());
-  const [value, setValue] = useState('Original');
+  const brands = ['Chino', 'Japones', 'Taiwanés', 'Otros', 'America'];
   const [uid, setUid] = useState();
+  const [isVisible, setIsVisible] = useState(false);
   const [message, setMessage] = useState();
-  const {toasRef, id, navigation} = props;
+  const [prices, setPrices] = useState({});
+  const [value, setValue] = useState('Chino');
+  const {toasRef, id, navigation, toasRefSuccess} = props;
+  const inputPrice = useRef();
+  const inputGarant = useRef();
 
   useEffect(() => {
-    const uid = firebase.auth().currentUser.uid;
-    setUid(uid);
+    const uid_firebase = firebase.auth().currentUser.uid;
+    setUid(uid_firebase);
+    //setPrices([{id: id, uid: uid, prices: []}]);
+    setPrices({prices: []});
   }, []);
-
   const onChange_text = (e, type) => {
     setFormOffert({...formOffert, [type]: e.nativeEvent.text});
   };
-  const obSubmitOffert = () => {
+
+  function renderBrands() {
+    //console.log(color);
+    return brands.map((brand) => {
+      return (
+        <View style={styles.viewBrans} key={brand}>
+          <RadioButton.Group
+            onValueChange={(value) => setValue(value)}
+            value={value}>
+            <View style={{alignItems: 'center'}}>
+              <Text>{brand}</Text>
+              <RadioButton value={brand} />
+            </View>
+          </RadioButton.Group>
+        </View>
+      );
+    });
+  }
+
+  function renderOffert() {
+    const pricesOffer = prices.prices;
+    return (
+      <FlatList
+        data={pricesOffer}
+        renderItem={(price) => <Offers list={price} />}
+        keyExtractor={(item, index) => index.toString()}
+        horizontal
+      />
+    );
+  }
+  const Offers = ({list}) => {
+    const {brand, garant, price} = list.item;
+    return (
+      <View>
+        <TouchableOpacity
+          style={[styles.listContainer, {backgroundColor: '#A7CBD9'}]}
+          onPress={() => {}}>
+          <Text style={styles.listTitle} numberOfLines={1}>
+            {brand}
+          </Text>
+
+          <View>
+            <View style={{alignItems: 'center'}}>
+              <Text style={styles.count}> {`${price}`} </Text>
+              <Text style={styles.subTitle}>{`La garantìa`}</Text>
+              <Text style={styles.subTitle}>{garant}</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  const onSubmitOffert = () => {
     const data = {
-      ...formOffert,
+      ...prices,
       idOrder: id,
       uid: uid,
-      product: value,
+      product: 'value',
       estado: 'pendiente',
       createAt: new Date(),
+      //prices: prices,
     };
-    const {price, brand, garant, product} = data;
-    if (!product || !price || !brand || !garant) {
-      toasRef.current.show('debe ingresar la información requerida', 2000);
+    setMessage('PROCESANDO OFERTA..');
+    let ref = db.collection('Offert').doc(uid).collection('ofertas').doc();
+    db.collection('Offert')
+      .doc(uid)
+      .set({...''});
+
+    db.collection('Offert')
+      .doc(uid)
+      .collection('ofertas')
+      .doc(ref.id)
+      .set(data)
+      .then((response) => {
+        setMessage('GRACIAS, SU OFERTA FUE ENVIADA CON ÉXITO!');
+        setTimeout(() => {
+          navigation.navigate('home');
+        }, 2000);
+      })
+      .catch((error) => {
+        console.log('firebase offert', error);
+      });
+    console.log('prices', prices);
+  };
+  const onSubmitAdd = () => {
+    const {price, garant} = formOffert;
+    if (!price || !garant) {
+      toasRef.current.show('debe ingresar Precio/Garantía', 2000);
     } else if (price.length < 0) {
       toasRef.current.show('Precio Vació.', 2000);
-    } else if (brand.length < 4) {
-      toasRef.current.show('Marca, debe tener mínimo 4 caracteres', 2000);
     } else if (garant.length < 5) {
       toasRef.current.show('Ingrese los días de garantía ó meses, años ', 2000);
     } else {
-      setMessage('PROCESANDO OFERTA..');
-      let ref = db.collection('Offert').doc(uid).collection('ofertas').doc();
-      db.collection('Offert')
-        .doc(uid)
-        .set({...''});
+      if (!prices.prices.some((p) => p.brand === value)) {
+        const list = prices;
 
-      db.collection('Offert')
-        .doc(uid)
-        .collection('ofertas')
-        .doc(ref.id)
-        .set(data)
-        .then((response) => {
-          setMessage('GRACIAS, SU OFERTA FUE ENVIADA CON ÉXITO!');
-          setTimeout(() => {
-            navigation.goBack();
-          }, 2000);
-        })
-        .catch((error) => {
-          console.log('firebase offert', error);
+        list.prices.push({
+          price: price,
+          brand: value,
+          garant: garant,
         });
+        toasRefSuccess.current.show('Se agrego correctamente', 3000);
+        setPrices(list);
+        setIsVisible(true);
+        setFormOffert({price: '', garant: ''});
+        inputPrice.current.clear();
+        inputGarant.current.clear();
+        console.log('PRICE', prices);
+      } else {
+        toasRef.current.show('Oferta ya registrada', 3000);
+      }
     }
   };
 
@@ -77,54 +163,55 @@ export default function OffertForm(props) {
           Findit Oferta
         </Title>
       </View>
-
-      <View style={[offertStyle.viewCard, {justifyContent: 'space-around'}]}>
-        <Text style={{top: 10, fontWeight: 'bold'}}>Seleccione</Text>
-        <RadioButton.Group
-          onValueChange={(value) => setValue(value)}
-          value={value}>
-          <View>
-            <Text>Original</Text>
-            <RadioButton value="Original" />
-          </View>
-          <View>
-            <Text>Genérico</Text>
-            <RadioButton value="Genérico" />
-          </View>
-        </RadioButton.Group>
-      </View>
-
+      <View style={styles.line} />
+      <ScrollView horizontal>{renderBrands()}</ScrollView>
+      <View style={styles.line} />
       <View style={styles.form}>
-        <InputText
-          title={'Precio a ofertar'}
-          text={'price'}
-          onChange={onChange_text}
-          icon={'check'}
-          is_valid={false}
-          keyboardType={'numeric'}
-        />
+        <View style={styles.action}>
+          <TextInput
+            placeholder="Precio"
+            placeholderTextColor="#666666"
+            keyboardType="numeric"
+            style={[styles.textInput, {color: 'grey'}]}
+            autoCapitalize="none"
+            onChange={(e) => onChange_text(e, 'price')}
+            ref={inputPrice}
+          />
+        </View>
+        <View style={styles.action}>
+          <TextInput
+            placeholder="Garantía"
+            placeholderTextColor="#666666"
+            style={[styles.textInput, {color: 'grey'}]}
+            autoCapitalize="none"
+            onChange={(e) => onChange_text(e, 'garant')}
+            ref={inputGarant}
+          />
+        </View>
 
-        <InputText
-          title={'Marca'}
-          text={'brand'}
-          onChange={onChange_text}
-          icon={'check'}
-          is_valid={false}
-        />
-        <InputText
-          title={'Garantia'}
-          text={'garant'}
-          onChange={onChange_text}
-          icon={'check'}
-          is_valid={false}
-        />
+        <View
+          style={{
+            marginVertical: 20,
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+          }}>
+          <TouchableOpacity onPress={onSubmitAdd} style={styles.addList}>
+            {/*<Icon name="plus" size={16} color="blue" />*/}
+            <Text style={styles.add}>
+              {!isVisible ? 'Agregue una oferta' : 'Añadir más'}
+            </Text>
+          </TouchableOpacity>
+          {isVisible && (
+            <TouchableOpacity onPress={onSubmitOffert} style={styles.addList}>
+              <Text style={styles.add}>Terminar</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+        <View style={{alignItems: 'center'}}>
+          <Text style={styles.textFooter}>{message}</Text>
+        </View>
 
-        <TouchableOpacity onPress={obSubmitOffert} style={styles.btn}>
-          <Text style={{color: 'white', fontWeight: 'bold'}}>
-            Enviar Oferta
-          </Text>
-        </TouchableOpacity>
-        <Text style={styles.textFooter}>{message}</Text>
+        <View>{renderOffert()}</View>
       </View>
     </ScrollView>
   );
@@ -133,7 +220,6 @@ export default function OffertForm(props) {
 function defaultForm() {
   return {
     price: '',
-    brand: '',
     garant: '',
   };
 }
@@ -141,6 +227,39 @@ function defaultForm() {
 const styles = StyleSheet.create({
   viewFormOffert: {
     margin: 20,
+  },
+  viewBrans: {
+    flexDirection: 'row',
+    borderRadius: 8,
+    margin: 5,
+    width: 100,
+    padding: 15,
+    paddingBottom: 0,
+    //backgroundColor: '#fff',
+    //shadowOpacity: 0.14,
+    //shadowRadius: 4,
+    //shadowColor: '#000',
+    //shadowOffset: {height: 0, width: 0},
+  },
+  line: {
+    height: 5,
+    backgroundColor: '#EBEBEB',
+    marginVertical: 1,
+  },
+  addList: {
+    borderWidth: 1,
+    borderColor: '#CACACA',
+    borderRadius: 50,
+    padding: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  add: {
+    color: '#24A6D9',
+    fontWeight: '600',
+    fontSize: 14,
+    //marginTop: 8,
+    textAlign: 'center',
   },
   form: {
     borderRadius: 8,
@@ -156,9 +275,22 @@ const styles = StyleSheet.create({
   textFooter: {
     fontWeight: 'bold',
     fontSize: 20,
-    textAlign: 'right',
-    top: 40,
+    //textAlign: 'right'
+    top: 0,
     color: 'green',
+  },
+  action: {
+    flexDirection: 'row',
+    marginTop: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f2f2f2',
+    paddingBottom: 5,
+  },
+  textInput: {
+    flex: 1,
+    marginTop: Platform.OS === 'ios' ? 10 : -12,
+    paddingLeft: 10,
+    color: '#05375a',
   },
   btn: {
     flex: 1,
@@ -167,6 +299,33 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 8,
     justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  //probando
+  listContainer: {
+    paddingVertical: 25,
+    paddingHorizontal: 16,
+    borderRadius: 6,
+    marginHorizontal: 12,
+    alignItems: 'center',
+    width: 130,
+    height: 180,
+  },
+  listTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#ffffff',
+    marginBottom: 18,
+  },
+  count: {
+    fontSize: 20,
+    fontWeight: '200',
+    color: '#ffffff',
+  },
+  subTitle: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#ffffff',
     alignItems: 'center',
   },
 });
