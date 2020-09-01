@@ -7,6 +7,7 @@ import {
   FlatList,
   TextInput,
   Platform,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {Text, Title, Avatar, RadioButton} from 'react-native-paper';
@@ -19,6 +20,7 @@ import logo from '../../assets/img/findit-1.png';
 const db = firebase.firestore(firebase);
 export default function OffertForm(props) {
   const [formOffert, setFormOffert] = useState(defaultForm());
+  const [state, setState] = useState(false);
   const brands = ['Chino', 'Japones', 'Taiwanés', 'Otros', 'America'];
   const [uid, setUid] = useState();
   const [isVisible, setIsVisible] = useState(false);
@@ -65,26 +67,50 @@ export default function OffertForm(props) {
         renderItem={(price) => <Offers list={price} />}
         keyExtractor={(item, index) => index.toString()}
         horizontal
+        extraData={state}
       />
     );
   }
   const Offers = ({list}) => {
     const {brand, garant, price} = list.item;
+    const deleteTodo = (index) => {
+      let item = prices;
+
+      item.prices.splice(index, 1);
+      setPrices(item);
+      if (item.prices.length === 0) {
+        setIsVisible(false);
+      }
+
+      setState(true);
+      setState(false);
+    };
+    const alert = (index) => {
+      Alert.alert(
+        'Oferta',
+        'Eliminar Oferta',
+        [
+          {
+            text: 'Cancelar',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {text: 'OK', onPress: () => deleteTodo(index)},
+        ],
+        {cancelable: false},
+      );
+    };
     return (
       <View>
         <TouchableOpacity
           style={[styles.listContainer, {backgroundColor: '#A7CBD9'}]}
-          onPress={() => {}}>
-          <Text style={styles.listTitle} numberOfLines={1}>
-            {brand}
-          </Text>
-
-          <View>
-            <View style={{alignItems: 'center'}}>
-              <Text style={styles.count}> {`${price}`} </Text>
-              <Text style={styles.subTitle}>{`La garantìa`}</Text>
-              <Text style={styles.subTitle}>{garant}</Text>
-            </View>
+          onPress={() => alert(list.index)}>
+          <View style={{marginLeft: 5}}>
+            <Text style={styles.listTitle} numberOfLines={1}>
+              {brand}
+            </Text>
+            <Text style={styles.count}>{`${price} Lps`}</Text>
+            <Text style={styles.subTitle}>{`La garantía es: ${garant}`}</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -96,7 +122,6 @@ export default function OffertForm(props) {
       ...prices,
       idOrder: id,
       uid: uid,
-      product: 'value',
       estado: 'pendiente',
       createAt: new Date(),
       //prices: prices,
@@ -201,11 +226,11 @@ export default function OffertForm(props) {
               {!isVisible ? 'Agregue una oferta' : 'Añadir más'}
             </Text>
           </TouchableOpacity>
-          {isVisible && (
+          {isVisible ? (
             <TouchableOpacity onPress={onSubmitOffert} style={styles.addList}>
               <Text style={styles.add}>Terminar</Text>
             </TouchableOpacity>
-          )}
+          ) : null}
         </View>
         <View style={{alignItems: 'center'}}>
           <Text style={styles.textFooter}>{message}</Text>
@@ -303,29 +328,37 @@ const styles = StyleSheet.create({
   },
   //probando
   listContainer: {
-    paddingVertical: 25,
-    paddingHorizontal: 16,
-    borderRadius: 6,
-    marginHorizontal: 12,
-    alignItems: 'center',
-    width: 130,
-    height: 180,
+    backgroundColor: '#FFF',
+    borderRadius: 5,
+    height: 50,
+    margin: 5,
+    marginBottom: 15,
+    shadowColor: '#999',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 5,
+    width: '95%',
   },
   listTitle: {
-    fontSize: 24,
-    fontWeight: '700',
+    fontSize: 20,
+    fontWeight: '600',
     color: '#ffffff',
-    marginBottom: 18,
+    //marginBottom: 18,
   },
   count: {
-    fontSize: 20,
-    fontWeight: '200',
-    color: '#ffffff',
+    fontWeight: 'bold',
+    width: 200,
+    textAlign: 'right',
+    top: -20,
+    paddingRight: 10,
   },
   subTitle: {
     fontSize: 12,
     fontWeight: '700',
     color: '#ffffff',
     alignItems: 'center',
+    marginTop: 10,
+    top: -30,
   },
 });
