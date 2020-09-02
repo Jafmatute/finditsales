@@ -9,8 +9,8 @@ import {
   Platform,
   Alert,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/AntDesign';
 import {Text, Title, Avatar, RadioButton} from 'react-native-paper';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import firebase from '../../utils/firebase';
 import 'firebase/firestore';
 //component
@@ -27,7 +27,7 @@ export default function OffertForm(props) {
   const [message, setMessage] = useState();
   const [prices, setPrices] = useState({});
   const [value, setValue] = useState('Chino');
-  const {toasRef, id, navigation, toasRefSuccess} = props;
+  const {toasRef, id, uidClient, navigation, toasRefSuccess} = props;
   const inputPrice = useRef();
   const inputGarant = useRef();
 
@@ -68,6 +68,7 @@ export default function OffertForm(props) {
         keyExtractor={(item, index) => index.toString()}
         horizontal
         extraData={state}
+        show
       />
     );
   }
@@ -122,6 +123,7 @@ export default function OffertForm(props) {
       ...prices,
       idOrder: id,
       uid: uid,
+      uidClient: uidClient,
       estado: 'pendiente',
       createAt: new Date(),
       //prices: prices,
@@ -180,13 +182,12 @@ export default function OffertForm(props) {
 
   return (
     <ScrollView
+      showsVerticalScrollIndicator={false}
       keyboardShouldPersistTaps="always"
       style={styles.viewFormOffert}>
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
         <Avatar.Image source={logo} size={50} />
-        <Title style={{fontWeight: 'bold', bottom: 10, top: 2}}>
-          Findit Oferta
-        </Title>
+        <Title style={{fontWeight: 'bold', bottom: 10, top: 2}}>Findit</Title>
       </View>
       <View style={styles.line} />
       <ScrollView horizontal>{renderBrands()}</ScrollView>
@@ -213,30 +214,44 @@ export default function OffertForm(props) {
             ref={inputGarant}
           />
         </View>
-
-        <View
-          style={{
-            marginVertical: 20,
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-          }}>
-          <TouchableOpacity onPress={onSubmitAdd} style={styles.addList}>
-            {/*<Icon name="plus" size={16} color="blue" />*/}
-            <Text style={styles.add}>
-              {!isVisible ? 'Agregue una oferta' : 'Añadir más'}
-            </Text>
-          </TouchableOpacity>
-          {isVisible ? (
-            <TouchableOpacity onPress={onSubmitOffert} style={styles.addList}>
-              <Text style={styles.add}>Terminar</Text>
-            </TouchableOpacity>
-          ) : null}
-        </View>
+        <View>{renderOffert()}</View>
         <View style={{alignItems: 'center'}}>
           <Text style={styles.textFooter}>{message}</Text>
         </View>
-
-        <View>{renderOffert()}</View>
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          marginTop: 12,
+          alignItems: 'center',
+        }}>
+        <TouchableOpacity
+          onPress={onSubmitAdd}
+          style={[styles.viewButtom, {backgroundColor: 'green'}]}>
+          <View style={styles.addList}>
+            <Text style={styles.add}>
+              {!isVisible ? 'Agregue una oferta' : 'Añadir más'}
+            </Text>
+          </View>
+          <MaterialCommunityIcons
+            style={{color: '#fff'}}
+            name="plus-circle-outline"
+            size={25}
+          />
+        </TouchableOpacity>
+        {isVisible ? (
+          <TouchableOpacity onPress={onSubmitOffert} style={styles.viewButtom}>
+            <View style={styles.addList}>
+              <Text style={styles.add}>Enviar</Text>
+            </View>
+            <MaterialCommunityIcons
+              style={{color: '#fff'}}
+              name="send-circle-outline"
+              size={25}
+            />
+          </TouchableOpacity>
+        ) : null}
       </View>
     </ScrollView>
   );
@@ -260,31 +275,32 @@ const styles = StyleSheet.create({
     width: 100,
     padding: 15,
     paddingBottom: 0,
-    //backgroundColor: '#fff',
-    //shadowOpacity: 0.14,
-    //shadowRadius: 4,
-    //shadowColor: '#000',
-    //shadowOffset: {height: 0, width: 0},
   },
   line: {
     height: 5,
     backgroundColor: '#EBEBEB',
     marginVertical: 1,
   },
+  viewButtom: {
+    backgroundColor: '#8e459e',
+    marginTop: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 2,
+    paddingHorizontal: 2,
+    borderRadius: 20,
+  },
   addList: {
-    borderWidth: 1,
-    borderColor: '#CACACA',
-    borderRadius: 50,
-    padding: 15,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    overflow: 'hidden',
   },
   add: {
-    color: '#24A6D9',
-    fontWeight: '600',
-    fontSize: 14,
-    //marginTop: 8,
-    textAlign: 'center',
+    paddingHorizontal: 10,
+    color: '#3C3C3C',
+    backgroundColor: '#fff',
+    paddingVertical: 3,
+    borderRadius: 20,
   },
   form: {
     borderRadius: 8,

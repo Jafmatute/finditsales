@@ -73,7 +73,13 @@ export default function DetailOrder(props) {
           <Item title="Fecha" value={date} />
           <View style={orderStyle.line} />
           <Text style={orderStyle.itemHeader}>OFERTAR</Text>
-          <Item title="Findit" id={id} sale navigation={navigation} />
+          <Item
+            title="Findit"
+            id={id}
+            uidClient={uid}
+            sale
+            navigation={navigation}
+          />
           <View style={orderStyle.line} />
           <Text style={orderStyle.itemHeader}>INFORMACIÓN VEHICULO </Text>
           <Item title="VIN" value={VIN} />
@@ -86,13 +92,13 @@ export default function DetailOrder(props) {
     </ScrollView>
   );
 }
-const Item = ({title, value, sale, id, navigation}) => {
+const Item = ({title, value, sale, id, uidClient, navigation}) => {
   return (
     <View style={styles.item}>
       <TextTitle style={styles.itemTitle}>{title}</TextTitle>
       {sale ? (
         <TouchableOpacity
-          onPress={() => navigation.navigate('offert', {id})}
+          onPress={() => navigation.navigate('offert', {id, uidClient})}
           style={styles.itemSchedule}>
           <View style={orderStyle.itemTextActiveContainer}>
             <TextTitle style={orderStyle.textActive}>

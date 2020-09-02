@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, Platform} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {Appbar, useTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -53,12 +53,13 @@ const StackNavigation = () => {
                 </TouchableOpacity>
               )}
               <Appbar.Content
+                style={{marginLeft: Platform.OS === 'android' && 100}}
                 title={
                   title === 'home' ? (
                     <Icon
                       style={{marginRight: 10}}
-                      name="home"
-                      size={40}
+                      name="opencart"
+                      size={20}
                       color={theme.colors.primary}
                     />
                   ) : (

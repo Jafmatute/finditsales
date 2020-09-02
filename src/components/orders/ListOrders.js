@@ -9,6 +9,7 @@ import {
   Image,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import firebase from '../../utils/firebase';
 import 'firebase/storage';
 //custom
@@ -115,6 +116,11 @@ const Order = (props) => {
             <Text style={orderStyle.textActive}>Detalle</Text>
           </View>
         </TouchableOpacity>
+        <MaterialCommunityIcons
+          style={{color: '#fff'}}
+          size={25}
+          name="alert-decagram-outline"
+        />
       </View>
     </View>
   );

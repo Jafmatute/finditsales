@@ -7,13 +7,15 @@ import OffertForm from '../../components/offerts/OffertForm';
 export default function Offert({navigation, route}) {
   const toasRef = useRef();
   const toasRefSuccess = useRef();
-  const {id} = route.params;
+  const {id, uidClient} = route.params;
+
   return (
     <KeyboardAvoidingView behavior="height" style={styles.container}>
       <OffertForm
         toasRef={toasRef}
         toasRefSuccess={toasRefSuccess}
         id={id}
+        uidClient={uidClient}
         navigation={navigation}
       />
       <Toast

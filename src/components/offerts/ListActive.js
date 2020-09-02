@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,9 +9,12 @@ import {
 } from 'react-native';
 import logo from '../../assets/img/findit-2.png';
 import Icon from 'react-native-vector-icons/AntDesign';
+import firebase from '../../utils/firebase';
+//constante firebase
+firebase.firestore().settings({experimentalForceLongPolling: true});
+const db = firebase.firestore(firebase);
 export default function ListActive(props) {
   const {active, handleLoadMore, isLoading} = props;
-
   return (
     <View>
       {active.length > 0 ? (
@@ -34,35 +37,69 @@ export default function ListActive(props) {
 }
 function Active(props) {
   const {active} = props;
-  const {brand, estado, garant, price, product} = active.item;
-  console.log('ACTIVE', props);
+  const {estado, prices, createAt, idOrder, uidClient} = active.item;
+  console.log('ID', props);
+  const [title, setTitle] = useState(null);
+  const [imageOrders, setImageOrder] = useState(null);
+  useEffect(() => {
+    db.collection('Orders')
+      .doc(uidClient)
+      .collection('ordenes')
+      .doc(idOrder)
+      //.where('uid', '==', uidClient)
+      .get()
+      .then((response) => {
+        //console.log('Respuesta', response.data());
+        let name = response.data().descripcion;
+        setTitle(name);
+      });
+  }, [idOrder]);
+  useEffect(() => {
+    const image = `${uidClient}/${idOrder}/${idOrder}`;
+    //console.log(image);
+    firebase
+      .storage()
+      .ref(`Orders/${image}.jpg`)
+      .getDownloadURL()
+      .then((img) => {
+        //console.log(img);
+        setImageOrder(img);
+      });
+  });
   return (
     <View style={styles.cardsWrapper}>
       <View>
-        <Image style={styles.card} source={logo} />
+        <Image style={styles.card} source={{uri: imageOrders}} />
       </View>
 
       <View style={styles.cardInfo}>
-        <Text style={styles.cardTitle}>{`${product} de ${brand}`}</Text>
-        <View style={styles.line} />
-        <Text style={styles.cardDetails}>{estado}</Text>
+        <Text style={[styles.cardTitle, {top: 12}]}>{`${title}`}</Text>
         <Text
-          style={
-            styles.cardDetails
-          }>{`La garantía del pedido es ${garant}`}</Text>
+          style={[
+            styles.cardDetails,
+            {textAlign: 'right', color: '#8e459e', fontWeight: 'bold'},
+          ]}>
+          {estado}
+        </Text>
         <View style={styles.line} />
-        <View>
-          <Text
-            style={[
-              styles.cardDetails,
-              {fontWeight: 'bold'},
-            ]}>{`Monto ofertado:`}</Text>
-          <Text
-            style={[
-              styles.cardDetails,
-              {textAlign: 'right', top: -13},
-            ]}>{`${price} LPS HN`}</Text>
-        </View>
+
+        {prices.map((brand, index) => {
+          return (
+            <View
+              key={index}
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <Text style={styles.cardDetails}>{index + 1}</Text>
+              <Text style={styles.cardDetails}>{`${brand.brand}`}</Text>
+              <Text style={styles.cardDetails}>{`${brand.price}`}</Text>
+              <Text style={styles.cardDetails}>{`${brand.garant}`}</Text>
+            </View>
+          );
+        })}
+        <View style={styles.line} />
       </View>
       {/*<View style={styles.viewAdd}>
         <Icon name="plus" size={20} style={styles.icon} />
@@ -95,9 +132,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cardsWrapper: {
-    /*marginTop: 20,
-    width: '90%',
-    alignSelf: 'center',*/
     flexDirection: 'row',
     height: 100,
     width: '95%',
@@ -111,47 +145,28 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   card: {
-    /*height: 100,
-    marginVertical: 10,
-    flexDirection: 'row',
-    shadowColor: '#999',
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 5,*/
     height: 50,
-    width: 60,
+    width: 50,
     borderRadius: 10,
     marginTop: 20,
   },
   cardInfo: {
-    /*flex: 2,
-    padding: 10,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderLeftWidth: 0,
-    borderBottomRightRadius: 8,
-    borderTopRightRadius: 8,
-    backgroundColor: '#fff',*/
-    width: '65%',
+    width: '70%',
     justifyContent: 'flex-end',
     paddingHorizontal: 10,
     height: '100%',
   },
   cardTitle: {
-    //fontWeight: 'bold',
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: 'bold',
   },
   cardDetails: {
-    fontSize: 11,
+    fontSize: 12,
     color: '#444',
+    textAlign: 'justify',
+    padding: 1,
   },
   viewAdd: {
-    /*width: '25%',
-    justifyContent: 'flex-end',
-    height: '100%',
-    marginHorizontal: 50,*/
     position: 'absolute',
     backgroundColor: '#ccc',
     bottom: 10,
